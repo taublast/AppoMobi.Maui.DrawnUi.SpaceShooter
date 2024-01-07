@@ -1,0 +1,263 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<game:BaseGame
+    x:Class="SpaceShooter.Game.SpaceGame"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:draw="http://schemas.appomobi.com/drawnUi/2023/draw"
+    xmlns:game="clr-namespace:SpaceShooter.Game"
+    x:DataType="game:SpaceGame"
+    BackgroundColor="#000011"
+    HorizontalOptions="Fill"
+    IsClippedToBounds="True"
+    Tag="Game"
+    VerticalOptions="Fill">
+
+    <!--  STARS BACKGROUND  -->
+    <draw:SkiaLayout
+        HorizontalOptions="Fill"
+        UseCache="Image"
+        VerticalOptions="Fill"
+        ZIndex="-1">
+
+        <draw:SkiaImage
+            Aspect="AspectCover"
+            HorizontalOptions="Fill"
+            Opacity="0.33"
+            Source="Space/Sprites/nebula.jpg"
+            VerticalOptions="Fill" />
+
+        <draw:SkiaImageTiles
+            HorizontalOptions="Fill"
+            Opacity="0.5"
+            Source="Space/Sprites/stars.png"    
+            TileAspect="Cover"
+            TileHeight="300"
+            TileWidth="300"
+            VerticalOptions="Fill" />
+
+    </draw:SkiaLayout>
+
+    <!--  STARS PARALLAX  -->
+    <draw:SkiaImageTiles
+        x:Name="ParallaxLayer"
+        HorizontalOptions="Fill"
+        Opacity="0.75"
+        Source="Space/Sprites/stars.png"
+        TileCacheType="GPU"
+        TileAspect="Cover"
+        TileHeight="600"
+        TileWidth="600"
+        VerticalOptions="Fill">
+        <!--<draw:SkiaImageTiles.UseCache>
+            <OnPlatform x:TypeArguments="enums:SkiaCacheType">
+                <On
+                    Platform="Android"
+                    Value="GPU" />
+            </OnPlatform>
+        </draw:SkiaImageTiles.UseCache>-->
+    </draw:SkiaImageTiles>
+
+    <!--  SCORE  -->
+    <draw:SkiaLabel
+        x:Name="LabelScore"
+        Margin="16"
+        BackgroundColor="Transparent"
+        FillBlendMode="Color"
+        FontFamily="FontGameExtraBold"
+        FontSize="24"
+        HorizontalOptions="Start"
+        MaxLines="1"
+        StrokeColor="Black"
+        StrokeWidth="3"
+
+        TextColor="White"
+        UseCache="GPU"
+        ZIndex="110">
+        <draw:SkiaLabel.FillGradient>
+
+            <draw:SkiaGradient
+                EndXRatio="0"
+                EndYRatio="1"
+                StartXRatio="0"
+                StartYRatio="0"
+                Type="Linear">
+                <draw:SkiaGradient.Colors>
+                    <Color>White</Color>
+                    <Color>Yellow</Color>
+                    <Color>Orange</Color>
+                    <Color>Red</Color>
+                    <Color>DarkRed</Color>
+                </draw:SkiaGradient.Colors>
+            </draw:SkiaGradient>
+
+        </draw:SkiaLabel.FillGradient>
+    </draw:SkiaLabel>
+
+    <!--  HI SCORE  -->
+    <draw:SkiaLabel
+        x:Name="LabelHiScore"
+        Margin="16"
+        BackgroundColor="Transparent"
+        FillBlendMode="Color"
+        FontFamily="FontGameExtraBold"
+        FontSize="24"
+        HorizontalOptions="End"
+        MaxLines="1"
+        Opacity="0.9"
+        StrokeColor="Black"
+        StrokeWidth="3"
+        TextColor="White"
+        UseCache="GPU"
+        ZIndex="110">
+        <draw:SkiaLabel.FillGradient>
+
+            <draw:SkiaGradient
+                EndXRatio="0"
+                EndYRatio="1"
+                StartXRatio="0"
+                StartYRatio="0"
+                Type="Linear">
+                <draw:SkiaGradient.Colors>
+                    <Color>White</Color>
+                    <Color>Yellow</Color>
+                    <Color>Orange</Color>
+                    <Color>Red</Color>
+                    <Color>DarkRed</Color>
+                </draw:SkiaGradient.Colors>
+            </draw:SkiaGradient>
+
+        </draw:SkiaLabel.FillGradient>
+    </draw:SkiaLabel>
+
+    <!--  PLAYER  -->
+    <draw:SkiaImage
+        x:Name="player"
+        Aspect="AspectFitFill"
+        HeightRequest="50"
+        HorizontalOptions="Center"
+        Source="Space/Sprites/player.png"
+        TranslationY="-40"
+        UseCache="GPU"
+        VerticalOptions="End"
+        WidthRequest="60"
+        ZIndex="5" />
+
+    <!--  SHIELD EXPLOSION  -->
+    <draw:SkiaLottie
+        x:Name="PlayerShieldExplosion"
+        AutoPlay="False"
+        HorizontalOptions="Center"
+        LockRatio="1"
+        Opacity="0.75"
+        Source="Space/Lottie/crash.json"
+        SpeedRatio="0.6"
+        Tag="ShieldExplosion"
+        TranslationX="0"
+        TranslationY="-44"
+        UseCache="ImageDoubleBuffered"
+        VerticalOptions="End"
+        WidthRequest="110"
+        ZIndex="4" />
+
+    <!--  PLAYER SHIELD  -->
+    <draw:SkiaLottie
+        x:Name="PlayerShield"
+        AutoPlay="True"
+        HorizontalOptions="Center"
+        LockRatio="1"
+        Opacity="0.66"
+        Repeat="-1"
+        Source="Space/Lottie/shield.json"
+        SpeedRatio="0.5"
+        Tag="PlayerShield"
+        TranslationY="6"
+        UseCache="ImageDoubleBuffered"
+        VerticalOptions="End"
+        WidthRequest="130"
+        ZIndex="4" />
+
+    <!--  HEALTH BAR  -->
+    <game:HealthBar
+        x:Name="HealthBar"
+        HeightRequest="4"
+        HorizontalOptions="Center"
+        Tag="Health"
+        TranslationY="-28"
+        UseCache="GPU"
+        VerticalOptions="End"
+        WidthRequest="40"
+        ZIndex="6"
+        Value="{Binding Health}" />
+
+    <!--  MOTHER EARTH  -->
+    <draw:SkiaImage
+        Aspect="AspectCover"
+        HeightRequest="45"
+        HorizontalOptions="Fill"
+        Opacity="0.95"
+        Source="Space/Sprites/earth.png"
+        UseCache="GPU"
+        VerticalOffset="26"
+        VerticalOptions="End"
+        ZIndex="1" />
+
+    <!--  GAME OVER  -->
+    <draw:SkiaShape
+        x:Name="GameOver"
+        BackgroundColor="#40000000"
+        HorizontalOptions="Fill"
+        IsVisible="False"
+        VerticalOptions="Fill"
+        ZIndex="100">
+
+        <draw:SkiaLabel
+            FillBlendMode="Color"
+            FontFamily="FontGameExtraBold"
+            FontSize="30"
+            HorizontalOptions="Center"
+            MaxLines="1"
+            Opacity="0.9"
+            StrokeColor="Black"
+            StrokeWidth="5"
+            Text="GAME OVER"
+            TextColor="White"
+            UseCache="Operations"
+            VerticalOptions="Center"
+            ZIndex="110">
+            <draw:SkiaLabel.FillGradient>
+
+                <draw:SkiaGradient
+                    EndXRatio="0"
+                    EndYRatio="1"
+                    StartXRatio="0"
+                    StartYRatio="0"
+                    Type="Linear">
+                    <draw:SkiaGradient.Colors>
+                        <Color>White</Color>
+                        <Color>Yellow</Color>
+                        <Color>Orange</Color>
+                        <Color>Red</Color>
+                        <Color>DarkRed</Color>
+                    </draw:SkiaGradient.Colors>
+                </draw:SkiaGradient>
+
+            </draw:SkiaLabel.FillGradient>
+        </draw:SkiaLabel>
+
+    </draw:SkiaShape>
+    <!--<draw:SkiaLabel
+        FillBlendMode="Color"
+        FontFamily="FontGameExtraBold"
+        FontSize="32"
+        HorizontalOptions="Center"
+        MaxLines="1"
+        Opacity="0.9"
+        Text="GAME OVER"
+        TextColor="Black"
+        UseCache="GPU"
+        VerticalOptions="Center"
+        ZIndex="109">
+
+    </draw:SkiaLabel>-->
+
+</game:BaseGame>
