@@ -1,7 +1,7 @@
 # Space Shooter Arcade Game Etude    
 ### Build with DrawnUi for .Net Maui
 
-_Destined to evaluate MAUI performance and eventually game potential._
+_Destined to evaluate .Net Maui performance and 2-D game potential._
 
 ## The Challenge
 
