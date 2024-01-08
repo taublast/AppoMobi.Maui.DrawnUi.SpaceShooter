@@ -1,15 +1,15 @@
 # Space Shooter Arcade Game Etude    
-### Build with DrawnUi for .Net Maui
+### Built with DrawnUi for .Net Maui
 
-_Destined to evaluate .Net Maui performance and 2-D game potential._
+_Designated to evaluate the .Net Maui 2-D game potential._
 
 ## The Challenge
 
-To create a simple yet heavily animated arcade cross-platform game, running on Android, Windows, iOS, and Mac (Catalyst) with a single code base, using all the advantages that .Net Maui and SkiaSharp would provide.
+To create a simple yet heavily animated arcade cross-platform game, running on Android, Windows, iOS, and Mac (Catalyst) with a single code base, using all the advantages that .Net Maui and SkiaSharp do provide.
 
 ## The Game
 
-Inspired by one of the awesome ITC MOO tutorials. There is much more content to be played with, as you can see now we can do it all in .Net Maui!
+Driven by one of the awesome [ITC MOO tutorials](https://www.youtube.com/@mooict/videos). There is so much content to play with now that we could do all that in .Net Maui!
 
 Free Lottie animations were used to fulfill the need for animated content quickly.
 
@@ -27,6 +27,7 @@ Attained FPS looks okay in Release builds and even on Debug. With an optimized d
 
 Lottie animations also have proven themselves to be very effective and useful to be quickly consumed during game creation.
 
-Our main enemy was the GC collector which is feared for its unpredictable lag spikes during long animations. We tried to make it trigger as little as possible using Unity's suggested techniques. It still has its impact so we can hope some day .Net Maui could adopt that ... custom GC-collector that Unity is already using.
+Main enemy was the GC collector which is feared for its unpredictable lag spikes during long animations.
+We tried to make it trigger as little as possible using [Unity's suggested techniques](https://docs.unity3d.com/Manual/performance-garbage-collection-best-practices.html). It still has its small impact but we can hope for .Net Maui some day to adopt a custom [incremental GC-collector](https://docs.unity3d.com/Manual/performance-garbage-collector.html) that Unity is using.
 
 
