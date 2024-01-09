@@ -611,6 +611,17 @@ public partial class SpaceGame : MauiGame
     {
         base.GameKeyUp(key);
 
+        if (key == GameKey.Space && State == GameState.Ended)
+        {
+            StartNewGame();
+            return;
+        }
+
+        //toso unpause when pause is implemented
+
+        if (State != GameState.Playing)
+            return;
+
         if (key == GameKey.Left)
         {
             moveLeft = false;
@@ -625,6 +636,9 @@ public partial class SpaceGame : MauiGame
     public override void GameKeyDown(GameKey key)
     {
         base.GameKeyDown(key);
+
+        if (State != GameState.Playing)
+            return;
 
         if (key == GameKey.Space)
         {
@@ -843,7 +857,6 @@ public partial class SpaceGame : MauiGame
     }
 
     #endregion
-
 
     private SKRect _playerHitBox = new();
     private bool _needPrerender;
