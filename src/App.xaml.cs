@@ -1,6 +1,6 @@
 ﻿using AppoMobi.Maui.DrawnUi;
 using System.Runtime.InteropServices;
-using UIKit;
+
 
 
 namespace SpaceShooter
@@ -56,9 +56,9 @@ namespace SpaceShooter
 
             window.Created += (sender, args) =>
             {
-                foreach (var scene in UIApplication.SharedApplication.ConnectedScenes)
+                foreach (var scene in UIKit.UIApplication.SharedApplication.ConnectedScenes)
                 {
-                    if (scene is UIWindowScene windowScene)
+                    if (scene is UIKit.UIWindowScene windowScene)
                     {
                         windowScene.SizeRestrictions.MinimumSize = new(DefaultWidth, DefaultHeight);
                         windowScene.SizeRestrictions.MaximumSize = new(DefaultWidth, DefaultHeight);
