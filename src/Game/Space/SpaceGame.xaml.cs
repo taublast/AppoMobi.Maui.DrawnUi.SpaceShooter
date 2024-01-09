@@ -3,13 +3,14 @@ using AppoMobi.Maui.DrawnUi.Draw;
 using AppoMobi.Maui.DrawnUi.Drawn.Animate;
 using AppoMobi.Maui.DrawnUi.Drawn.Infrastructure.Interfaces;
 using AppoMobi.Maui.DrawnUi.Infrastructure.Models;
+using AppoMobi.Maui.DrawnUi.Views;
 using AppoMobi.Maui.Gestures;
 using AppoMobi.Specials;
 using SkiaSharp;
 
 namespace SpaceShooter.Game;
 
-public partial class SpaceGame : BaseGame
+public partial class SpaceGame : MauiGame
 {
 
     /// <summary>
@@ -27,7 +28,7 @@ public partial class SpaceGame : BaseGame
     /// for NON-precise movement system
     /// </summary>
     const float playerSpeed = 300;
-
+   
     const float playerMoveSpeed = 1.25f; //points of movement per point of panning
 
     const float starsSpeed = 20; //stars parallax
@@ -300,35 +301,33 @@ public partial class SpaceGame : BaseGame
             }
 
             //we have 2 gestures modes as optional: fun and precise
-            if (preciseMovement)
-            {
-                while (MoveCommands.Count > 0)
-                {
-                    var command = MoveCommands.Pop();
+            //but we process both here, because one can come from mouse/finger other from keys..
 
-                    if (command.Direction == MoveDirection.Left || command.Direction == MoveDirection.Right)
-                    {
-                        var movePlayer = playerSpeed * command.Distance;
-                        UpdatePlayerPosition(player.TranslationX + movePlayer);
-                    }
+            while (MoveCommands.Count > 0)
+            {
+                var command = MoveCommands.Pop();
+
+                if (command.Direction == MoveDirection.Left || command.Direction == MoveDirection.Right)
+                {
+                    var movePlayer = playerMoveSpeed * command.Distance;
+                    UpdatePlayerPosition(player.TranslationX + movePlayer);
                 }
             }
-            else
-            {
-                // player movement begins
-                if (moveLeft)
-                {
-                    // if move left is true AND player is inside the boundary then move player to the left
-                    UpdatePlayerPosition(player.TranslationX - playerSpeed * deltaMs);
-                }
 
-                if (moveRight)
-                {
-                    // if move right is true AND player left + 90 is less than the width of the form
-                    // then move the player to the right
-                    UpdatePlayerPosition(player.TranslationX + playerSpeed * deltaMs);
-                }
+            // player movement begins
+            if (moveLeft)
+            {
+                // if move left is true AND player is inside the boundary then move player to the left
+                UpdatePlayerPosition(player.TranslationX - playerSpeed * deltaMs);
             }
+
+            if (moveRight)
+            {
+                // if move right is true AND player left + 90 is less than the width of the form
+                // then move the player to the right
+                UpdatePlayerPosition(player.TranslationX + playerSpeed * deltaMs);
+            }
+
 
 
             // if the damage integer is greater than 99
@@ -373,6 +372,11 @@ public partial class SpaceGame : BaseGame
     #endregion
 
     #region METHODS
+
+    void Fire()
+    {
+        AddBullet();
+    }
 
     void StartNewGame()
     {
@@ -601,7 +605,44 @@ public partial class SpaceGame : BaseGame
 
     #endregion
 
-    #region GESTURES
+    #region GESTURES AND KEYS
+
+    public override void GameKeyUp(GameKey key)
+    {
+        base.GameKeyUp(key);
+
+        if (key == GameKey.Left)
+        {
+            moveLeft = false;
+        }
+        else
+        if (key == GameKey.Right)
+        {
+            moveRight = false;
+        }
+    }
+
+    public override void GameKeyDown(GameKey key)
+    {
+        base.GameKeyDown(key);
+
+        if (key == GameKey.Space)
+        {
+            Fire();
+        }
+        else
+        if (key == GameKey.Left)
+        {
+            moveLeft = true;
+            moveRight = false;
+        }
+        else
+        if (key == GameKey.Right)
+        {
+            moveLeft = false;
+            moveRight = true;
+        }
+    }
 
     // move left and move right boolean decleration
     volatile bool moveLeft, moveRight;
@@ -639,7 +680,7 @@ public partial class SpaceGame : BaseGame
                 if (!_wasPanning)
                 {
                     //custom tapped
-                    AddBullet();
+                    Fire();
                 }
             }
 
@@ -672,7 +713,6 @@ public partial class SpaceGame : BaseGame
                             Distance = distance,
                             Direction = MoveDirection.Left
                         });
-
                     }
                     else
                     if (distance > 0)
@@ -682,7 +722,6 @@ public partial class SpaceGame : BaseGame
                             Distance = distance,
                             Direction = MoveDirection.Right
                         });
-
                     }
                 }
 

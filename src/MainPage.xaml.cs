@@ -2,6 +2,7 @@
 
 namespace SpaceShooter
 {
+
     public partial class MainPage
     {
         public MainPage()

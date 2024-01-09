@@ -1,10 +1,45 @@
 using AppoMobi.Maui.DrawnUi.Draw;
 using AppoMobi.Maui.DrawnUi.Drawn.Animate;
+using AppoMobi.Maui.DrawnUi.Views;
 
 namespace SpaceShooter.Game;
 
-public class BaseGame : SkiaLayout
+public class MauiGame : SkiaLayout
 {
+    public static event EventHandler<GameKey> OnKeyDown;
+    public static event EventHandler<GameKey> OnKeyUp;
+
+    public static void KeyboardPressed(GameKey key)
+    {
+        OnKeyDown?.Invoke(null, key);
+    }
+
+    public static void KeyboardReleased(GameKey key)
+    {
+        OnKeyUp?.Invoke(null, key);
+    }
+
+    public MauiGame()
+    {
+        OnKeyDown += OnKeyboardDownEvent;
+        OnKeyUp += OnKeyboardUpEvent;
+    }
+
+    ~MauiGame()
+    {
+        OnKeyUp -= OnKeyboardUpEvent;
+        OnKeyDown -= OnKeyboardDownEvent;
+    }
+
+    private void OnKeyboardDownEvent(object sender, GameKey key)
+    {
+        GameKeyDown(key);
+    }
+
+    private void OnKeyboardUpEvent(object sender, GameKey key)
+    {
+        GameKeyUp(key);
+    }
 
     public void StartLoop(int delayMs = 0)
     {
@@ -13,6 +48,14 @@ public class BaseGame : SkiaLayout
             _appLoop = new(this, GameTick);
             _appLoop.Start(delayMs);
         }
+    }
+
+    public virtual void GameKeyDown(GameKey key)
+    {
+    }
+
+    public virtual void GameKeyUp(GameKey key)
+    {
     }
 
     private ActionOnTickAnimator _appLoop;
