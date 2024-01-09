@@ -88,9 +88,7 @@ public partial class SpaceGame : BaseGame
         RndExtensions.RandomizeTime(); //amstrad cpc forever
 
         IgnoreChildrenInvalidations = true;
-
-        StartLoop(1000); //todo start when superview has handler
-
+ 
         // in case we implement key press for desktop
         Focus();
 
