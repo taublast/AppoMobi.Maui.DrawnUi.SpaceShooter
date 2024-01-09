@@ -54,8 +54,6 @@ namespace SpaceShooter
 
 #elif MACCATALYST
 
-            ResizeWindow(window);
-
             window.Created += (sender, args) =>
             {
                 foreach (var scene in UIApplication.SharedApplication.ConnectedScenes)
