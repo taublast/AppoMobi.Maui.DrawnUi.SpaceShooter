@@ -1,5 +1,6 @@
 ﻿using AppoMobi.Maui.DrawnUi;
 using System.Runtime.InteropServices;
+using UIKit;
 
 
 namespace SpaceShooter
@@ -13,10 +14,12 @@ namespace SpaceShooter
             MainPage = new MainPage();
         }
 
+        const int DefaultWidth = 500;
+        const int DefaultHeight = 800;
+
         void ResizeWindow(Window window)
         {
-            const int DefaultWidth = 500;
-            const int DefaultHeight = 800;
+
 
             // change window size.
             window.Width = DefaultWidth;
@@ -52,6 +55,18 @@ namespace SpaceShooter
 #elif MACCATALYST
 
             ResizeWindow(window);
+
+            window.Created += (sender, args) =>
+            {
+                foreach (var scene in UIApplication.SharedApplication.ConnectedScenes)
+                {
+                    if (scene is UIWindowScene windowScene)
+                    {
+                        windowScene.SizeRestrictions.MinimumSize = new(DefaultWidth, DefaultHeight);
+                        windowScene.SizeRestrictions.MaximumSize = new(DefaultWidth, DefaultHeight);
+                    }
+                }
+            };
 
 #endif
 
