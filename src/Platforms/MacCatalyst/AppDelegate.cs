@@ -9,7 +9,7 @@ namespace SpaceShooter
     {
         public override void PressesBegan(NSSet<UIPress> presses, UIPressesEvent evt)
         {
-            base.PressesBegan(presses, evt);
+            //base.PressesBegan(presses, evt);
 
             foreach (UIPress press in presses)
             {
@@ -58,12 +58,7 @@ namespace SpaceShooter
             ReleaseKeys(presses);
         }
 
-        public override void PressesCancelled(NSSet<UIPress> presses, UIPressesEvent evt)
-        {
-            base.PressesCancelled(presses, evt);
 
-            ReleaseKeys(presses);
-        }
 
         protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
     }

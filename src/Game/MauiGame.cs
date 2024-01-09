@@ -46,8 +46,8 @@ public class MauiGame : SkiaLayout
         if (_appLoop == null)
         {
             _appLoop = new(this, GameTick);
-            _appLoop.Start(delayMs);
         }
+        _appLoop.Start(delayMs);
     }
 
     public virtual void GameKeyDown(GameKey key)
