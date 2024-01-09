@@ -88,7 +88,7 @@ public partial class SpaceGame : BaseGame
         RndExtensions.RandomizeTime(); //amstrad cpc forever
 
         IgnoreChildrenInvalidations = true;
- 
+
         // in case we implement key press for desktop
         Focus();
 
@@ -214,77 +214,57 @@ public partial class SpaceGame : BaseGame
             _playerHitBox = new SKRect(playerPosition.X, playerPosition.Y,
                 (float)(playerPosition.X + player.Width), (float)(playerPosition.Y + player.Height));
 
-            // search for bullets, enemies and collision begins
-            foreach (var x in this.Views)
+            // Process collision of bullets and enemies etc in parallel
+            Parallel.ForEach(Views, x =>
             {
-                // if any rectangle has the tag bullet in it
                 if (x is BulletSprite bulletSprite && bulletSprite.IsActive)
                 {
-                    // make a rect class with the bullet rectangles properties
                     var bullet = bulletSprite.GetHitBox();
-
-                    // check if bullet has reached top part of the screen
                     if (bulletSprite.TranslationY < -Height)
                     {
                         RemoveBullet(bulletSprite);
                     }
 
-                    // run another for each loop inside of the main loop this one has a local variable called y
-                    foreach (var y in Views)
+                    Parallel.ForEach(Views, y =>
                     {
-                        // if y is a rectangle and it has a tag called enemy
                         if (y is EnemySprite enemySprite2 && enemySprite2.IsActive)
                         {
-                            // make a local rect called enemy and put the enemies properties into it
                             var enemy = enemySprite2.GetHitBox();
-                            // now check if bullet and enemy is colliding or not
-                            // if the bullet is colliding with the enemy rectangle
                             if (bullet.IntersectsWith(enemy))
                             {
                                 CollideBulletAndEnemy(enemySprite2, bulletSprite);
                             }
                         }
-                    }
+                    });
 
-                    // move the bullet rectangle towards top of the screen
                     if (bulletSprite.IsActive)
                     {
                         bulletSprite.UpdatePosition(deltaMs);
                     }
                 }
-
-                // outside the second loop lets check for the enemy again
-                if (x is EnemySprite enemySprite && enemySprite.IsActive)
+                else if (x is EnemySprite enemySprite && enemySprite.IsActive)
                 {
-
-                    // make a new enemy rect for enemy hit box
                     var enemy = enemySprite.GetHitBox();
-
                     bool enemyAlive = true;
 
-                    // first check if the enemy object has gone passed the player meaning
-                    // its gone passed 700 pixels from the top
                     if (enemySprite.TranslationY > this.Height)
                     {
                         enemyAlive = false;
                         CollideEnemyAndEarth(enemySprite);
                     }
 
-                    // if the player hit box and the enemy is colliding 
                     if (_playerHitBox.IntersectsWith(enemy))
                     {
                         enemyAlive = false;
                         CollidePlayerAndEnemy(enemySprite);
                     }
 
-                    // if we find a rectangle with the enemy tag
                     if (enemyAlive)
                     {
                         enemySprite.UpdatePosition(deltaMs);
                     }
-
                 }
-            }
+            });
 
             // reduce time we wait between enemy creations
             pauseEnemyCreation -= 1 * deltaMs;
@@ -319,6 +299,7 @@ public partial class SpaceGame : BaseGame
                 }
             }
 
+            //we have 2 gestures modes as optional: fun and precise
             if (preciseMovement)
             {
                 while (MoveCommands.Count > 0)
@@ -350,17 +331,10 @@ public partial class SpaceGame : BaseGame
             }
 
 
-
-
             // if the damage integer is greater than 99
             if (Health < 1)
             {
                 EndGameLost();
-                //gameTimer.Stop(); // stop the main timer
-                //damageText.Content = "Damaged: 100"; // show this on the damaged text
-                //damageText.Foreground = Brushes.Red; // change the text colour to 100
-                //MessageBox.Show("Well Done Star Captain!" + Environment.NewLine + "You have destroyed " + score + " Alien ships");
-                // show the message box with the message inside of it
             }
 
         }
