@@ -96,24 +96,6 @@
 
     <None Remove="Resources\Raw\Images\8.jpg" />
 
-    <None Remove="Resources\Raw\Lottie\cross.json" />
-
-    <None Remove="Resources\Raw\Lottie\Loader.json" />
-
-    <None Remove="Resources\Raw\Lottie\ok.json" />
-
-    <None Remove="Resources\Raw\Lottie\robot.json" />
-
-    <None Remove="Resources\Raw\Shaders\blit.sksl" />
-
-    <None Remove="Resources\Raw\Shaders\curl.glsl" />
-
-    <None Remove="Resources\Raw\Shaders\curl.sksl" />
-
-    <None Remove="Resources\Raw\Shaders\glowblur.glsl" />
-
-    <None Remove="Resources\Raw\Shaders\glowblur.sksl" />
-
     <None Remove="Resources\Raw\Space\Sprites\nebula.jpg" />
 
     <None Remove="Resources\Raw\Space\Sprites\stars.png" />
@@ -138,7 +120,7 @@
 
    
   <ItemGroup>
-    <PackageReference Include="AppoMobi.Maui.DrawnUi" Version="1.0.2.9-pre" />   
+    <PackageReference Include="AppoMobi.Maui.DrawnUi" Version="1.0.3.3-pre" />   
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
 	</ItemGroup>
 

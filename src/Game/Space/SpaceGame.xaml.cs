@@ -1,9 +1,6 @@
 using AppoMobi.Maui.DrawnUi;
 using AppoMobi.Maui.DrawnUi.Draw;
-using AppoMobi.Maui.DrawnUi.Drawn.Animate;
 using AppoMobi.Maui.DrawnUi.Drawn.Infrastructure.Interfaces;
-using AppoMobi.Maui.DrawnUi.Infrastructure.Models;
-using AppoMobi.Maui.DrawnUi.Views;
 using AppoMobi.Maui.Gestures;
 using AppoMobi.Specials;
 using SkiaSharp;
@@ -12,11 +9,6 @@ namespace SpaceShooter.Game;
 
 public partial class SpaceGame : MauiGame
 {
-
-    /// <summary>
-    /// changes player gestures-movement calculation
-    /// </summary>
-    bool preciseMovement = false;
 
     const int maxEnemies = 32;
 
@@ -28,14 +20,12 @@ public partial class SpaceGame : MauiGame
     /// for NON-precise movement system
     /// </summary>
     const float playerSpeed = 300;
-   
+
     const float playerMoveSpeed = 1.25f; //points of movement per point of panning
 
     const float starsSpeed = 20; //stars parallax
 
     float pauseEnemySpawn = 3; // limit of enemy spawns
-
-    int enemySpriteCounter; // int to help change enemy images
 
     float pauseEnemyCreation;
 
@@ -215,7 +205,10 @@ public partial class SpaceGame : MauiGame
             _playerHitBox = new SKRect(playerPosition.X, playerPosition.Y,
                 (float)(playerPosition.X + player.Width), (float)(playerPosition.Y + player.Height));
 
+
+
             // Process collision of bullets and enemies etc in parallel
+            /*
             Parallel.ForEach(Views, x =>
             {
                 if (x is BulletSprite bulletSprite && bulletSprite.IsActive)
@@ -267,6 +260,83 @@ public partial class SpaceGame : MauiGame
                 }
             });
 
+            */
+
+
+
+            // search for bullets, enemies and collision begins
+            foreach (var x in this.Views)
+            {
+                // if any rectangle has the tag bullet in it
+                if (x is BulletSprite bulletSprite && bulletSprite.IsActive)
+                {
+                    // make a rect class with the bullet rectangles properties
+                    var bullet = bulletSprite.GetHitBox();
+
+                    // check if bullet has reached top part of the screen
+                    if (bulletSprite.TranslationY < -Height)
+                    {
+                        RemoveBullet(bulletSprite);
+                    }
+
+                    // run another for each loop inside of the main loop this one has a local variable called y
+                    foreach (var y in Views)
+                    {
+                        // if y is a rectangle and it has a tag called enemy
+                        if (y is EnemySprite enemySprite2 && enemySprite2.IsActive)
+                        {
+                            // make a local rect called enemy and put the enemies properties into it
+                            var enemy = enemySprite2.GetHitBox();
+                            // now check if bullet and enemy is colliding or not
+                            // if the bullet is colliding with the enemy rectangle
+                            if (bullet.IntersectsWith(enemy))
+                            {
+                                CollideBulletAndEnemy(enemySprite2, bulletSprite);
+                            }
+                        }
+                    }
+
+                    // move the bullet rectangle towards top of the screen
+                    if (bulletSprite.IsActive)
+                    {
+                        bulletSprite.UpdatePosition(deltaMs);
+                    }
+                }
+
+                // outside the second loop lets check for the enemy again
+                if (x is EnemySprite enemySprite && enemySprite.IsActive)
+                {
+
+                    // make a new enemy rect for enemy hit box
+                    var enemy = enemySprite.GetHitBox();
+
+                    bool enemyAlive = true;
+
+                    // first check if the enemy object has gone passed the player meaning
+                    // its gone passed 700 pixels from the top
+                    if (enemySprite.TranslationY > this.Height)
+                    {
+                        enemyAlive = false;
+                        CollideEnemyAndEarth(enemySprite);
+                    }
+
+                    // if the player hit box and the enemy is colliding 
+                    if (_playerHitBox.IntersectsWith(enemy))
+                    {
+                        enemyAlive = false;
+                        CollidePlayerAndEnemy(enemySprite);
+                    }
+
+                    // if we find a rectangle with the enemy tag
+                    if (enemyAlive)
+                    {
+                        enemySprite.UpdatePosition(deltaMs);
+                    }
+
+                }
+            }
+
+
             // reduce time we wait between enemy creations
             pauseEnemyCreation -= 1 * deltaMs;
 
@@ -297,20 +367,6 @@ public partial class SpaceGame : MauiGame
                 else
                 {
                     pauseEnemyCreation = pauseEnemySpawn;
-                }
-            }
-
-            //we have 2 gestures modes as optional: fun and precise
-            //but we process both here, because one can come from mouse/finger other from keys..
-
-            while (MoveCommands.Count > 0)
-            {
-                var command = MoveCommands.Pop();
-
-                if (command.Direction == MoveDirection.Left || command.Direction == MoveDirection.Right)
-                {
-                    var movePlayer = playerMoveSpeed * command.Distance;
-                    UpdatePlayerPosition(player.TranslationX + movePlayer);
                 }
             }
 
@@ -713,31 +769,6 @@ public partial class SpaceGame : MauiGame
                     moveLeft = false;
                 }
 
-                if (preciseMovement)
-                {
-
-                    var lastPanX = args.Location.X / RenderingScale;
-                    var distance = lastPanX - _lastDownX;
-                    _lastDownX = lastPanX;
-
-                    if (distance < 0)
-                    {
-                        MoveCommands.Push(new MoveCommand()
-                        {
-                            Distance = distance,
-                            Direction = MoveDirection.Left
-                        });
-                    }
-                    else
-                    if (distance > 0)
-                    {
-                        MoveCommands.Push(new MoveCommand()
-                        {
-                            Distance = distance,
-                            Direction = MoveDirection.Right
-                        });
-                    }
-                }
 
             }
         }
@@ -745,20 +776,6 @@ public partial class SpaceGame : MauiGame
         return base.ProcessGestures(type, args, touchAction, childOffset, childOffsetDirect, alreadyConsumed);
     }
 
-    public enum MoveDirection
-    {
-        None,
-        Left,
-        Right
-    }
-
-    public struct MoveCommand
-    {
-        public MoveDirection Direction { get; set; }
-        public float Distance { get; set; }
-    }
-
-    LimitedQueue<MoveCommand> MoveCommands { get; } = new(32);
 
 
     #endregion

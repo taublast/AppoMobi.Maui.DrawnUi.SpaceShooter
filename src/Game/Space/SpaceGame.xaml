@@ -29,7 +29,7 @@
         <draw:SkiaImageTiles
             HorizontalOptions="Fill"
             Opacity="0.5"
-            Source="Space/Sprites/stars.png"    
+            Source="Space/Sprites/stars.png"
             TileAspect="Cover"
             TileHeight="300"
             TileWidth="300"
@@ -43,8 +43,8 @@
         HorizontalOptions="Fill"
         Opacity="0.75"
         Source="Space/Sprites/stars.png"
-        TileCacheType="GPU"
         TileAspect="Cover"
+        TileCacheType="GPU"
         TileHeight="600"
         TileWidth="600"
         VerticalOptions="Fill">
@@ -69,7 +69,6 @@
         MaxLines="1"
         StrokeColor="Black"
         StrokeWidth="3"
-
         TextColor="White"
         UseCache="GPU"
         ZIndex="110">

@@ -4,11 +4,11 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:draw="http://schemas.appomobi.com/drawnUi/2023/draw"
-    xmlns:game="clr-namespace:SpaceShooter.Game" xmlns:spaceshooter="clr-namespace:SpaceShooter"
+    xmlns:game="clr-namespace:SpaceShooter.Game" 
     BackgroundColor="Black">
 
     <draw:Canvas
-        GesturesEnabled="True"
+        Gestures="Enabled"
         HardwareAccelerated="True"
         HorizontalOptions="Fill"
         VerticalOptions="Fill">
