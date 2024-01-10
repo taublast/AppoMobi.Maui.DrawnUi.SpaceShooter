@@ -10,6 +10,17 @@
                 <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
+
+            <x:String x:Key="SvgMenu">
+                <![CDATA[ 
+                                     
+            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" viewBox="0 0 2000 2500" enable-background="new 0 0 2000 2000" xml:space="preserve"><path d="M1150.604,975.298l-295.862,83.138l-83.139,295.862l-83.139-295.862l-295.861-83.138l295.861-83.138l83.139-295.862  l83.139,295.862L1150.604,975.298z M1430.438,755.273l-49.727-176.959l-49.727,176.959L1154.025,805l176.959,49.727l49.727,176.96  l49.727-176.96L1607.396,805L1430.438,755.273z M1199.15,1152.134l-29.564,105.21l-105.211,29.565l105.211,29.565l29.564,105.211  l29.566-105.211l105.212-29.564l-105.212-29.565L1199.15,1152.134z"/></svg>
+                                            
+                ]]>
+
+            </x:String>
+
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>

@@ -434,6 +434,8 @@ public partial class SpaceGame : MauiGame
 
     void StartNewGame()
     {
+
+
         _spritesToBeRemoved.Clear();
 
         foreach (var control in Views)
@@ -483,7 +485,7 @@ public partial class SpaceGame : MauiGame
 
     void CollidePlayerAndEnemy(EnemySprite enemySprite)
     {
-        AddDamage(5);
+        AddDamage(30);
         Score += 1;
 
         RemoveReusable(enemySprite);
@@ -503,7 +505,7 @@ public partial class SpaceGame : MauiGame
 
     private void CollideEnemyAndEarth(EnemySprite enemySprite)
     {
-        AddDamage(10);
+        AddDamage(20);
 
         RemoveReusable(enemySprite);
 

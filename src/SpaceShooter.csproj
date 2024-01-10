@@ -120,7 +120,7 @@
 
    
   <ItemGroup>
-    <PackageReference Include="AppoMobi.Maui.DrawnUi" Version="1.0.3.3-pre" />   
+    <PackageReference Include="AppoMobi.Maui.DrawnUi" Version="1.0.3.4-pre" />   
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
 	</ItemGroup>
 
