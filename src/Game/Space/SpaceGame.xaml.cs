@@ -21,8 +21,6 @@ public partial class SpaceGame : MauiGame
     /// </summary>
     const float playerSpeed = 300;
 
-    const float playerMoveSpeed = 1.25f; //points of movement per point of panning
-
     const float starsSpeed = 20; //stars parallax
 
     float pauseEnemySpawn = 3; // limit of enemy spawns

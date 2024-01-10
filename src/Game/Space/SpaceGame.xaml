@@ -44,18 +44,10 @@
         Opacity="0.75"
         Source="Space/Sprites/stars.png"
         TileAspect="Cover"
-        TileCacheType="GPU"
+        TileCacheType="Image"
         TileHeight="600"
         TileWidth="600"
-        VerticalOptions="Fill">
-        <!--<draw:SkiaImageTiles.UseCache>
-            <OnPlatform x:TypeArguments="enums:SkiaCacheType">
-                <On
-                    Platform="Android"
-                    Value="GPU" />
-            </OnPlatform>
-        </draw:SkiaImageTiles.UseCache>-->
-    </draw:SkiaImageTiles>
+        VerticalOptions="Fill" />
 
     <!--  SCORE  -->
     <draw:SkiaLabel
