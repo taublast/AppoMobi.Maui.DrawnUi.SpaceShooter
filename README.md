@@ -1,6 +1,6 @@
-Space Shooter Arcade Game Etude
-===============
+Space Shooter Arcade Game Etude<br>
 ***Built with DrawnUI for .NET MAUI***
+===============
 
 ## The Challenge
 
