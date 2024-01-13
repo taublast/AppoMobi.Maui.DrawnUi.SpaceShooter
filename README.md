@@ -1,5 +1,5 @@
 # Space Shooter Arcade Game Etude    
-### Built with DrawnUi for .Net Maui
+### Built with DrawnUi for .NET MAUI
 
 ## The Challenge
 
