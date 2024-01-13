@@ -62,6 +62,5 @@ public partial class SpaceGame
         {
             await FadeToAsync(0, 150);
         }
-
     }
 }

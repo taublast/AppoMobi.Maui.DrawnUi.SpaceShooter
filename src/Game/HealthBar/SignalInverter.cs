@@ -5,7 +5,6 @@ namespace SpaceShooter.Game;
 
 public class SignalInverter : SkiaShape
 {
-
     public static readonly BindableProperty ValueProperty = BindableProperty.Create(nameof(Value),
         typeof(double),
         typeof(SignalInverter),
@@ -24,15 +23,15 @@ public class SignalInverter : SkiaShape
         }
     }
 
-    float _widthConstraint;
+    private float _widthConstraint;
 
-    bool invalidateProcessed;
+    private bool _invalidateProcessed;
 
     protected override void OnMeasured()
     {
         base.OnMeasured();
 
-        invalidateProcessed = false;
+        _invalidateProcessed = false;
 
         UpdateValue();
     }
@@ -94,16 +93,14 @@ public class SignalInverter : SkiaShape
         OnPropertyChanged(nameof(Points));
     }
 
-
-
     public void UpdateValue()
     {
         if (Parent == null)
             return;
 
-        if (!invalidateProcessed)
+        if (!_invalidateProcessed)
         {
-            invalidateProcessed = true;
+            _invalidateProcessed = true;
             LastValue = Value;
             SetValue(Value);
             return;
@@ -137,8 +134,6 @@ public class SignalInverter : SkiaShape
         }
 
     }
-
-
 
     public static FloatingPosition[] GradientPoints =
     {

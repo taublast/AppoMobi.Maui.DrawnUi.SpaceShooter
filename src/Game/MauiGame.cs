@@ -1,6 +1,5 @@
 using AppoMobi.Maui.DrawnUi.Draw;
 using AppoMobi.Maui.DrawnUi.Drawn.Animate;
-using AppoMobi.Maui.DrawnUi.Views;
 
 namespace SpaceShooter.Game;
 
