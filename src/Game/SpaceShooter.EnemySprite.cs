@@ -1,3 +1,6 @@
+// NOTE: Parts of the code below are based on
+// https://www.mooict.com/wpf-c-tutorial-create-a-space-battle-shooter-game-in-visual-studio/7/
+
 using AppoMobi.Maui.DrawnUi.Draw;
 using AppoMobi.Maui.DrawnUi.Enums;
 using AppoMobi.Specials;
@@ -5,7 +8,7 @@ using SkiaSharp;
 
 namespace SpaceShooter.Game;
 
-public partial class SpaceGame
+public partial class SpaceShooter
 {
     public class EnemySprite : SkiaImage, IWithHitBox, IReusableSprite
     {

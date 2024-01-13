@@ -17,7 +17,7 @@
             HorizontalOptions="Fill"
             VerticalOptions="Fill">
 
-            <game:SpaceGame />
+            <game:SpaceShooter />
 
             <draw:SkiaLabelFps
                 Margin="0,0,4,24"

@@ -124,6 +124,13 @@
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
 	</ItemGroup>
 
+   
+  <ItemGroup>
+    <Compile Update="Game\SpaceShooter.xaml.cs">
+      <DependentUpon>SpaceShooter.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
 
   <ItemGroup>
     <MauiAsset Update="Resources\Raw\Lottie\cross.json">

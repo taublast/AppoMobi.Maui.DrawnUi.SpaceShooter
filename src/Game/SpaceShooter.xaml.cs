@@ -1,4 +1,5 @@
-// NOTE: Parts of the code below are based on https://www.mooict.com/wpf-c-tutorial-create-a-space-battle-shooter-game-in-visual-studio/7/
+// NOTE: Parts of the code below are based on
+// https://www.mooict.com/wpf-c-tutorial-create-a-space-battle-shooter-game-in-visual-studio/7/
 
 using AppoMobi.Maui.DrawnUi;
 using AppoMobi.Maui.DrawnUi.Draw;
@@ -9,7 +10,7 @@ using SkiaSharp;
 
 namespace SpaceShooter.Game;
 
-public partial class SpaceGame : MauiGame
+public partial class SpaceShooter : MauiGame
 {
     const int maxEnemies = 32;
 
@@ -39,7 +40,7 @@ public partial class SpaceGame : MauiGame
 
     #region RENDERING
 
-    public SpaceGame()
+    public SpaceShooter()
     {
         InitializeComponent();
 
@@ -421,6 +422,22 @@ public partial class SpaceGame : MauiGame
 
     }
 
+    private GameState _gameState;
+    public GameState State
+    {
+        get
+        {
+            return _gameState;
+        }
+        set
+        {
+            if (_gameState != value)
+            {
+                _gameState = value;
+                OnPropertyChanged();
+            }
+        }
+    }
 
     #endregion
 
@@ -499,7 +516,8 @@ public partial class SpaceGame : MauiGame
         RemoveBullet(bulletSprite);
         RemoveReusable(enemySprite);
 
-        AddExplosion(enemySprite.TranslationX + enemySprite.Width / 2f, enemySprite.TranslationY + enemySprite.Height / 2f);
+        //create explosion not at the Y-center of the enemy but "at the nose minus 20pts"
+        AddExplosion(enemySprite.TranslationX + enemySprite.Width / 2f, enemySprite.TranslationY + enemySprite.Height - 20);
     }
 
     private void CollideEnemyAndEarth(EnemySprite enemySprite)
@@ -781,23 +799,6 @@ public partial class SpaceGame : MauiGame
 
     #region HUD
 
-    private GameState _gameState;
-    public GameState State
-    {
-        get
-        {
-            return _gameState;
-        }
-        set
-        {
-            if (_gameState != value)
-            {
-                _gameState = value;
-                OnPropertyChanged();
-            }
-        }
-    }
-
     private double _health = 100;
     public double Health
     {
@@ -879,30 +880,4 @@ public partial class SpaceGame : MauiGame
     private bool _initialized;
     private float _lastDownX;
 
-    public enum GameState
-    {
-        Unknown,
-        Playing,
-        Paused,
-        Ended
-    }
-
-    public interface IWithHitBox
-    {
-        SKRect GetHitBox();
-    }
-
-    /// <summary>
-    /// Resusable model, to avoid GC
-    /// </summary>
-    public interface IReusableSprite
-    {
-        bool IsActive { get; set; }
-
-        string Uid { get; }
-
-        void ResetAnimationState();
-
-        Task AnimateDisappearing();
-    }
 }

@@ -3,23 +3,25 @@ using AppoMobi.Maui.DrawnUi.Enums;
 
 namespace SpaceShooter.Game;
 
-public partial class SpaceGame
+public partial class SpaceShooter
 {
-    public class ExplosionSprite : SkiaLottie, IReusableSprite
+    public class ExplosionCrashSprite : SkiaLottie, IReusableSprite
     {
         public bool IsActive { get; set; }
 
-        public static ExplosionSprite Create()
+        public static ExplosionCrashSprite Create()
         {
-            var explosion = new ExplosionSprite()
+            var explosion = new ExplosionCrashSprite()
             {
                 AutoPlay = false,
+                VerticalOptions = LayoutOptions.End,
                 ZIndex = 6,
-                SpeedRatio = 1.5,
-                WidthRequest = 150,
+                WidthRequest = 110,
                 LockRatio = 1,
+                SpeedRatio = 0.6f,
+                Repeat = 0,
                 UseCache = SkiaCacheType.ImageDoubleBuffered,
-                Source = $"Space/Lottie/explosion.json"
+                Source = $"Space/Lottie/crash.json"
             };
             explosion.ResetAnimationState();
             return explosion;
@@ -27,13 +29,13 @@ public partial class SpaceGame
 
         public void ResetAnimationState()
         {
-            Opacity = 0.75;
+            Opacity = 0.5;
             Scale = 1;
         }
 
         public async Task AnimateDisappearing()
         {
-            await FadeToAsync(0, 200);
+            await FadeToAsync(0, 100);
         }
     }
 }

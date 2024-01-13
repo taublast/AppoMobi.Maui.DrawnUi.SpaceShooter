@@ -7,7 +7,7 @@ To create a simple yet heavily animated arcade cross-platform game, using .NET M
 
 ## The Game
 
-Driven by one of the awesome [ITC MOO tutorials](https://www.youtube.com/@mooict/videos). There is so much content to play with now that we could do all that in .NET MAUI!
+Driven by one of the awesome [ICT MOO tutorials](https://www.youtube.com/@mooict/videos). There is so much content to play with now that we could do all that in .NET MAUI!
 
 Free Lottie animations quickly fulfill the need for animated content.
 
