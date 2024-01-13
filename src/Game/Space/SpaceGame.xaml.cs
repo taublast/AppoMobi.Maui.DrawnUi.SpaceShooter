@@ -9,7 +9,6 @@ namespace SpaceShooter.Game;
 
 public partial class SpaceGame : MauiGame
 {
-
     const int maxEnemies = 32;
 
     const int maxExplosions = 8;
@@ -23,9 +22,9 @@ public partial class SpaceGame : MauiGame
 
     const float starsSpeed = 20; //stars parallax
 
-    float pauseEnemySpawn = 3; // limit of enemy spawns
+    const float pauseEnemySpawn = 3; // limit of enemy spawns
 
-    float pauseEnemyCreation;
+    private float _pauseEnemyCreation;
 
     //pools of reusable objects
     //to avoid lag spikes when creating or disposing or GC-ing items we simply reuse them
@@ -157,8 +156,6 @@ public partial class SpaceGame : MauiGame
         var enemy = EnemySprite.Create();
         EnemiesPool.Add(enemy.Uid, enemy);
     }
-
-
 
     protected override void OnChildAdded(SkiaControl child)
     {
@@ -336,35 +333,35 @@ public partial class SpaceGame : MauiGame
 
 
             // reduce time we wait between enemy creations
-            pauseEnemyCreation -= 1 * deltaMs;
+            _pauseEnemyCreation -= 1 * deltaMs;
 
             // our logic for calculating time between enemy spans according to difficulty and current score
-            if (pauseEnemyCreation < 0)
+            if (_pauseEnemyCreation < 0)
             {
                 AddEnemy(); // run the make enemies function
 
                 if (Score > 300)
                 {
-                    pauseEnemyCreation = pauseEnemySpawn - 2.0f;
+                    _pauseEnemyCreation = pauseEnemySpawn - 2.0f;
                 }
                 else
                 if (Score > 200)
                 {
-                    pauseEnemyCreation = pauseEnemySpawn - 1.5f;
+                    _pauseEnemyCreation = pauseEnemySpawn - 1.5f;
                 }
                 else
                 if (Score > 100)
                 {
-                    pauseEnemyCreation = pauseEnemySpawn - 1.0f;
+                    _pauseEnemyCreation = pauseEnemySpawn - 1.0f;
                 }
                 else
                 if (Score > 1)
                 {
-                    pauseEnemyCreation = pauseEnemySpawn - 0.5f;
+                    _pauseEnemyCreation = pauseEnemySpawn - 0.5f;
                 }
                 else
                 {
-                    pauseEnemyCreation = pauseEnemySpawn;
+                    _pauseEnemyCreation = pauseEnemySpawn;
                 }
             }
 
@@ -448,7 +445,7 @@ public partial class SpaceGame : MauiGame
 
         ProcessSpritesToBeRemoved();
 
-        pauseEnemyCreation = pauseEnemySpawn;
+        _pauseEnemyCreation = pauseEnemySpawn;
         Score = 0;
         Health = 100;
         GameOver.IsVisible = false;

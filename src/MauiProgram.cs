@@ -1,5 +1,4 @@
-﻿using AppoMobi.Maui.DrawnUi;
-using AppoMobi.Maui.DrawnUi.Infrastructure.Extensions;
+﻿using AppoMobi.Maui.DrawnUi.Infrastructure.Extensions;
 using Microsoft.Extensions.Logging;
 
 
@@ -7,7 +6,6 @@ namespace SpaceShooter
 {
     public static class MauiProgram
     {
-
         public static MauiApp CreateMauiApp()
         {
 

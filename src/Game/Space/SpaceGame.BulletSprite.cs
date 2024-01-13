@@ -48,6 +48,5 @@ public partial class SpaceGame
         {
             TranslationY -= SpeedRatio * Speed * deltaTime;
         }
-
     }
 }
