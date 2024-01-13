@@ -21,9 +21,9 @@ Android and iOS run fully hardware-accelerated, with iOS using Apple Metal and A
 
 ## Final Words
 
-Attained FPS looks okay in Release builds and even on Debug. With an optimized design, especially in regards to control caching, we could imagine more games and fancy animations built with #dotnetmaui.
+Attained FPS looks okay in Release builds and even on Debug. With an optimized design, especially in regards to control caching, we could imagine more games and fancy animations built with [#dotnetmaui](https://twitter.com/search?q=%23dotnetmaui).
 
 Lottie animations have proven themselves to be very easy and useful, quickly added during game creation.
 
 The main enemy was the garbage collector, which is feared for its unpredictable lag spikes during long animations.
-We tried to make it trigger as little as possible using [Unity's suggested techniques](https://docs.unity3d.com/Manual/performance-garbage-collection-best-practices.html). It still has its small impact but we can hope for .NET MAUI some day to adopt a custom [incremental GC-collector](https://docs.unity3d.com/Manual/performance-garbage-collector.html) that Unity is using.
+We tried to make it trigger as little as possible using [Unity's suggested techniques](https://docs.unity3d.com/Manual/performance-garbage-collection-best-practices.html). It still has its small impact but we can hope for .NET MAUI some day to adopt a custom [incremental GC-collector](https://docs.unity3d.com/Manual/performance-incremental-garbage-collection.html) that Unity is using.
