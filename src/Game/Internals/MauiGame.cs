@@ -5,39 +5,39 @@ namespace SpaceShooter.Game;
 
 public class MauiGame : SkiaLayout
 {
-    public static event EventHandler<GameKey> OnKeyDown;
-    public static event EventHandler<GameKey> OnKeyUp;
+    public static event EventHandler<MauiKey> KeyDown;
+    public static event EventHandler<MauiKey> KeyUp;
 
-    public static void KeyboardPressed(GameKey key)
+    public static void KeyboardPressed(MauiKey key)
     {
-        OnKeyDown?.Invoke(null, key);
+        KeyDown?.Invoke(null, key);
     }
 
-    public static void KeyboardReleased(GameKey key)
+    public static void KeyboardReleased(MauiKey key)
     {
-        OnKeyUp?.Invoke(null, key);
+        KeyUp?.Invoke(null, key);
     }
 
     public MauiGame()
     {
-        OnKeyDown += OnKeyboardDownEvent;
-        OnKeyUp += OnKeyboardUpEvent;
+        KeyDown += OnKeyboardDownEvent;
+        KeyUp += OnKeyboardUpEvent;
     }
 
     ~MauiGame()
     {
-        OnKeyUp -= OnKeyboardUpEvent;
-        OnKeyDown -= OnKeyboardDownEvent;
+        KeyUp -= OnKeyboardUpEvent;
+        KeyDown -= OnKeyboardDownEvent;
     }
 
-    private void OnKeyboardDownEvent(object sender, GameKey key)
+    private void OnKeyboardDownEvent(object sender, MauiKey key)
     {
-        GameKeyDown(key);
+        OnKeyDown(key);
     }
 
-    private void OnKeyboardUpEvent(object sender, GameKey key)
+    private void OnKeyboardUpEvent(object sender, MauiKey key)
     {
-        GameKeyUp(key);
+        OnKeyUp(key);
     }
 
     public void StartLoop(int delayMs = 0)
@@ -49,11 +49,11 @@ public class MauiGame : SkiaLayout
         _appLoop.Start(delayMs);
     }
 
-    public virtual void GameKeyDown(GameKey key)
+    public virtual void OnKeyDown(MauiKey key)
     {
     }
 
-    public virtual void GameKeyUp(GameKey key)
+    public virtual void OnKeyUp(MauiKey key)
     {
     }
 

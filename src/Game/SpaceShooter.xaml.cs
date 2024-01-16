@@ -680,11 +680,35 @@ public partial class SpaceShooter : MauiGame
 
     #region GESTURES AND KEYS
 
-    public override void GameKeyUp(GameKey key)
+    /// <summary>
+    /// mappings from platform-independent keys to game action key
+    /// </summary>
+    Dictionary<MauiKey, GameKey> ActionKeys = new()
     {
-        base.GameKeyUp(key);
+        { MauiKey.Space, GameKey.Fire },
+        { MauiKey.ArrowLeft, GameKey.Left },
+        { MauiKey.ArrowRight, GameKey.Right },
+    };
 
-        if (key == GameKey.Space && State == GameState.Ended)
+    /// <summary>
+    /// Map platform-independent key to internally assigned game key. Player could change these mappings if you implement this in settings.
+    /// </summary>
+    /// <param name="key"></param>
+    /// <returns></returns>
+    GameKey MapToGame(MauiKey key)
+    {
+        if (ActionKeys.TryGetValue(key, out var gameKey))
+        {
+            return gameKey;
+        }
+        return GameKey.Unknown;
+    }
+
+    public override void OnKeyUp(MauiKey mauiKey)
+    {
+        var key = MapToGame(mauiKey);
+
+        if (key == GameKey.Fire && State == GameState.Ended)
         {
             StartNewGame();
             return;
@@ -706,14 +730,14 @@ public partial class SpaceShooter : MauiGame
         }
     }
 
-    public override void GameKeyDown(GameKey key)
+    public override void OnKeyDown(MauiKey mauiKey)
     {
-        base.GameKeyDown(key);
+        var key = MapToGame(mauiKey);
 
         if (State != GameState.Playing)
             return;
 
-        if (key == GameKey.Space)
+        if (key == GameKey.Fire)
         {
             Fire();
         }
