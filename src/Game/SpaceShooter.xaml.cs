@@ -676,7 +676,7 @@ public partial class SpaceShooter : MauiGame
             return;
         }
 
-        //toso unpause when pause is implemented
+        //todo unpause when pause is implemented
 
         if (State != GameState.Playing)
             return;
