@@ -145,7 +145,7 @@
         Tag="ShieldExplosion"
         TranslationX="0"
         TranslationY="-44"
-        UseCache="ImageDoubleBuffered"
+        UseCache="None"
         VerticalOptions="End"
         WidthRequest="110"
         ZIndex="4" />
@@ -191,8 +191,6 @@
         VerticalOffset="26"
         VerticalOptions="End"
         ZIndex="1" />
-
-
 
     <!--  GAME OVER  -->
     <!--  DIALOG  -->

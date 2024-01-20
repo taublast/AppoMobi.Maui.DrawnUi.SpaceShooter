@@ -5,7 +5,7 @@
 /// </summary>
 public enum GameKey
 {
-    Unknown,
+    Unset,
     Fire,
     Left,
     Right

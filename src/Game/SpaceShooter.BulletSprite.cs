@@ -9,21 +9,36 @@ namespace SpaceShooter.Game;
 
 public partial class SpaceShooter
 {
-    public class BulletSprite : SkiaShape, IWithHitBox
+    public class BulletSprite : SkiaShape, IWithHitBox, IReusableSprite
     {
         public static float Speed = 500f;
 
         public bool IsActive { get; set; }
-
-        public SKRect GetHitBox()
+       
+        public void ResetAnimationState()
         {
 
-            var position = GetPositionOnCanvasInPoints();
-            var hitBox = new SKRect(position.X, position.Y,
-                (float)(position.X + Width), (float)(position.Y + Height));
-
-            return hitBox;
         }
+
+        public async Task AnimateDisappearing()
+        {
+
+        }
+
+        public void UpdateState(long time)
+        {
+            if (_stateUpdated != time)
+            {
+                var position = GetPositionOnCanvasInPoints();
+                var hitBox = new SKRect(position.X, position.Y,
+                    (float)(position.X + Width), (float)(position.Y + Height));
+                HitBox = hitBox;
+                _stateUpdated = time;
+            }
+        }
+        long _stateUpdated;
+
+        public SKRect HitBox { get; set; }
 
         public float SpeedRatio { get; set; }
 
@@ -31,7 +46,6 @@ public partial class SpaceShooter
         {
             var newBullet = new BulletSprite()
             {
-                Tag = "bullet",
                 HeightRequest = 16,
                 HorizontalOptions = LayoutOptions.Center,
                 VerticalOptions = LayoutOptions.End,

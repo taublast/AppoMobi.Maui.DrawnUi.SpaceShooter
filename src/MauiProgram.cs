@@ -25,7 +25,16 @@ namespace SpaceShooter
                     fonts.AddFont("Orbitron-ExtraBold.ttf", "FontGameExtraBold"); //800
                 });
 
-            builder.UseDrawnUi<App>();
+            builder.UseDrawnUi(new()
+            {
+                UseDesktopKeyboard = true, //capture keys on destop
+                DesktopWindow = new()
+                {
+                    Width = 500,
+                    Height = 700,
+                    IsFixedSize = true //user cannot resize window
+                }
+            });
 
 #if DEBUG
             builder.Logging.AddDebug();

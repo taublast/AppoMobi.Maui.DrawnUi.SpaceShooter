@@ -18,7 +18,7 @@ public partial class SpaceShooter
                 SpeedRatio = 1.5,
                 WidthRequest = 150,
                 LockRatio = 1,
-                UseCache = SkiaCacheType.ImageDoubleBuffered,
+                UseCache = SkiaCacheType.None,
                 Source = $"Space/Lottie/explosion.json"
             };
             explosion.ResetAnimationState();
@@ -33,7 +33,7 @@ public partial class SpaceShooter
 
         public async Task AnimateDisappearing()
         {
-            await FadeToAsync(0, 200);
+            await FadeToAsync(0, 150);
         }
     }
 }

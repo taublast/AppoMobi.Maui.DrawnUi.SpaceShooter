@@ -2,7 +2,7 @@ namespace SpaceShooter.Game;
 
 public enum GameState
 {
-    Unknown,
+    Unset,
     Playing,
     Paused,
     Ended

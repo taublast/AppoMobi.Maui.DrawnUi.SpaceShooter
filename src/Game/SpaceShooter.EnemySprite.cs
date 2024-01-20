@@ -14,14 +14,20 @@ public partial class SpaceShooter
     {
         public static float Speed = 50f;
 
-        public SKRect GetHitBox()
+        public void UpdateState(long time)
         {
-            var position = GetPositionOnCanvasInPoints();
-            var hitBox = new SKRect(position.X, position.Y,
-                (float)(position.X + Width), (float)(position.Y + Height));
-
-            return hitBox;
+            if (_stateUpdated != time)
+            {
+                var position = GetPositionOnCanvasInPoints();
+                var hitBox = new SKRect(position.X, position.Y,
+                    (float)(position.X + Width), (float)(position.Y + Height));
+                HitBox = hitBox;
+                _stateUpdated = time;
+            }
         }
+        long _stateUpdated;
+
+        public SKRect HitBox { get; set; }
 
         public bool IsActive { get; set; }
 
@@ -33,16 +39,15 @@ public partial class SpaceShooter
 
             var newEnemy = new EnemySprite()
             {
+                Source = $"{SpritesPath}/{enemySpriteCounter}.png", //random image
+                SpeedRatio = 0.9f + enemySpriteCounter * 2 / 10f, //random speed
+                ColorTint = Color.Parse("#22110022"), //tinted a bit for our game
                 ZIndex = 4,
                 UseCache = SkiaCacheType.GPU,
-                Source = $"{SpritesPath}/{enemySpriteCounter}.png",
-                Tag = "enemy",
                 WidthRequest = 50,
                 HeightRequest = 44,
                 Effect = SkiaImageEffect.Tint,
                 EffectBlendMode = SKBlendMode.SrcATop,
-                ColorTint = Color.Parse("#22110022"), //tinted for our game
-                SpeedRatio = 0.9f + enemySpriteCounter * 2 / 10f
             };
 
             newEnemy.ResetAnimationState();

@@ -7,7 +7,7 @@ public interface IReusableSprite
 {
     bool IsActive { get; set; }
 
-    string Uid { get; }
+    Guid Uid { get; }
 
     void ResetAnimationState();
 

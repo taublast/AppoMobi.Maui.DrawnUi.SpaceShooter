@@ -1,45 +1,52 @@
+using AppoMobi.Maui.DrawnUi;
 using AppoMobi.Maui.DrawnUi.Draw;
 using AppoMobi.Maui.DrawnUi.Drawn.Animate;
 
 namespace SpaceShooter.Game;
 
+/// <summary>
+/// Base class for implementing a game. StartLoop, StopLoop, override GameLoop(..) etc.
+/// </summary>
 public class MauiGame : SkiaLayout
 {
-    public static event EventHandler<MauiKey> KeyDown;
-    public static event EventHandler<MauiKey> KeyUp;
 
-    public static void KeyboardPressed(MauiKey key)
-    {
-        KeyDown?.Invoke(null, key);
-    }
-
-    public static void KeyboardReleased(MauiKey key)
-    {
-        KeyUp?.Invoke(null, key);
-    }
+    private ActionOnTickAnimator _appLoop;
+    protected long LastFrameTimeNanos;
 
     public MauiGame()
     {
-        KeyDown += OnKeyboardDownEvent;
-        KeyUp += OnKeyboardUpEvent;
+        KeyboardManager.KeyDown += OnKeyboardDownEvent;
+        KeyboardManager.KeyUp += OnKeyboardUpEvent;
     }
 
     ~MauiGame()
     {
-        KeyUp -= OnKeyboardUpEvent;
-        KeyDown -= OnKeyboardDownEvent;
+        KeyboardManager.KeyUp -= OnKeyboardUpEvent;
+        KeyboardManager.KeyDown -= OnKeyboardDownEvent;
     }
 
-    private void OnKeyboardDownEvent(object sender, MauiKey key)
+
+    /// <summary>
+    /// Override this for your game. `deltaMs` is time elapsed between the previous frame and this one 
+    /// </summary>
+    /// <param name="deltaMs"></param>
+    public virtual void GameLoop(float deltaMs)
     {
-        OnKeyDown(key);
+
     }
 
-    private void OnKeyboardUpEvent(object sender, MauiKey key)
+    /// <summary>
+    /// Stops game loop
+    /// </summary>
+    public virtual void StopLoop()
     {
-        OnKeyUp(key);
+        _appLoop.Stop();
     }
 
+    /// <summary>
+    /// Starts game loop
+    /// </summary>
+    /// <param name="delayMs"></param>
     public void StartLoop(int delayMs = 0)
     {
         if (_appLoop == null)
@@ -49,18 +56,10 @@ public class MauiGame : SkiaLayout
         _appLoop.Start(delayMs);
     }
 
-    public virtual void OnKeyDown(MauiKey key)
-    {
-    }
-
-    public virtual void OnKeyUp(MauiKey key)
-    {
-    }
-
-    private ActionOnTickAnimator _appLoop;
-
-    protected long LastFrameTimeNanos;
-
+    /// <summary>
+    /// Internal, use override GameLoop for your game.
+    /// </summary>
+    /// <param name="frameTime"></param>
     protected virtual void GameTick(long frameTime)
     {
         // Incoming frameTime is in nanoseconds
@@ -71,17 +70,48 @@ public class MauiGame : SkiaLayout
         GameLoop(deltaTime);
     }
 
-    public virtual void StopLoop()
+    #region KEYS
+
+    /// <summary>
+    /// Override this to process game keys
+    /// </summary>
+    /// <param name="key"></param>
+    public virtual void OnKeyDown(MauiKey key)
     {
-        _appLoop.Stop();
+
     }
 
     /// <summary>
-    /// Override this for your game. `deltaMs` is time elapsed between the previous frame and this one 
+    /// Override this to process game keys
     /// </summary>
-    /// <param name="deltaMs"></param>
-    public virtual void GameLoop(float deltaMs)
+    /// <param name="key"></param>
+    public virtual void OnKeyUp(MauiKey key)
     {
 
     }
+
+
+    /// <summary>
+    /// Do not use directly. It's public to be able to send keys to game manually if needed.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="key"></param>
+    public void OnKeyboardDownEvent(object sender, MauiKey key)
+    {
+        OnKeyDown(key);
+    }
+
+    /// <summary>
+    /// Do not use directly. It's public to be able to send keys to game manually if needed.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="key"></param>
+    public void OnKeyboardUpEvent(object sender, MauiKey key)
+    {
+        OnKeyUp(key);
+    }
+
+
+    #endregion
+
 }

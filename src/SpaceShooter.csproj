@@ -15,7 +15,7 @@
 		<ApplicationTitle>SpaceShooter</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>com.companyname.sandbox</ApplicationId>
+		<ApplicationId>com.mauigame.spaceshooter</ApplicationId>
 		<ApplicationIdGuid>230e07b0-ebc2-4fde-9ac8-074d5c3d69b3</ApplicationIdGuid>
 
 		<!-- Versions -->
@@ -43,39 +43,19 @@
 	  </MauiImage>
 	</ItemGroup>
 
+    <PropertyGroup Condition="'$(Configuration)'=='Debug'">
+    <AndroidEnableSGenConcurrent>True</AndroidEnableSGenConcurrent>
+  </PropertyGroup>
+  
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
-    <!--<EnableLLVM>True</EnableLLVM>-->
     <Optimize>True</Optimize>
     <!--<RunAOTCompilation>True</RunAOTCompilation>
     <PublishTrimmed>True</PublishTrimmed>
-    <MtouchUseLlvm>True</MtouchUseLlvm>-->
-    <AndroidEnableSGenConcurrent>True</AndroidEnableSGenConcurrent>
-  </PropertyGroup>
-
- 
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-android|AnyCPU'">
-    <AndroidEnableMultiDex>True</AndroidEnableMultiDex>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-android|AnyCPU'">
-    <AndroidEnableMultiDex>True</AndroidEnableMultiDex>
-  </PropertyGroup>
-
-  <!--<PropertyGroup Condition="'$(Configuration)'=='ReleaseRefs'">
-    <EnableLLVM>True</EnableLLVM>
-    <Optimize>True</Optimize>
-    <RunAOTCompilation>True</RunAOTCompilation>
-    <PublishTrimmed>True</PublishTrimmed>
     <MtouchUseLlvm>True</MtouchUseLlvm>
+    <EnableLLVM>True</EnableLLVM>-->
     <AndroidEnableSGenConcurrent>True</AndroidEnableSGenConcurrent>
+    <AndroidEnableMultiDex>True</AndroidEnableMultiDex>
   </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)'=='DebugRefs'">
-    <DebugSymbols>True</DebugSymbols>
-    <DefineConstants>$(DefineConstants);DEBUG</DefineConstants>
-    <MtouchLink>None</MtouchLink>
-  </PropertyGroup>-->
 
 
   <ItemGroup>
@@ -120,16 +100,9 @@
 
    
   <ItemGroup>
-    <PackageReference Include="AppoMobi.Maui.DrawnUi" Version="1.0.3.4-pre" />   
+    <PackageReference Include="AppoMobi.Maui.DrawnUi" Version="1.0.4.6-pre" />   
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
 	</ItemGroup>
-
-   
-  <ItemGroup>
-    <Compile Update="Game\SpaceShooter.xaml.cs">
-      <DependentUpon>SpaceShooter.xaml</DependentUpon>
-    </Compile>
-  </ItemGroup>
 
 
   <ItemGroup>
@@ -143,18 +116,6 @@
       <LogicalName>%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
     </MauiAsset>
     <MauiAsset Update="Resources\Raw\Lottie\ok.json">
-      <LogicalName>%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
-    </MauiAsset>
-    <MauiAsset Update="Resources\Raw\Shaders\blit.sksl">
-      <LogicalName>%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
-    </MauiAsset>
-    <MauiAsset Update="Resources\Raw\Shaders\curl.glsl">
-      <LogicalName>%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
-    </MauiAsset>
-    <MauiAsset Update="Resources\Raw\Shaders\glowblur.glsl">
-      <LogicalName>%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
-    </MauiAsset>
-    <MauiAsset Update="Resources\Raw\Shaders\glowblur.sksl">
       <LogicalName>%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
     </MauiAsset>
     <MauiAsset Update="Resources\Raw\Space\Sprites\stars.png">
