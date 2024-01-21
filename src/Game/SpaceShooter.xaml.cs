@@ -94,20 +94,22 @@ public partial class SpaceShooter : MauiGame
         // in case we implement key press for desktop
         Focus();
 
-        //avoiding wierd bug when deployed for the first time on win/catalyst
-        //images in xaml not loaded from resources:
+#if WINDOWS || MACCATALYST
+        //trying to avoid wierd bug when deployed for the first time on win/catalyst
+        //images in xaml not loaded from resources. todo investigate
         if (Player.LoadedSource == null)
         {
             var source = Player.Source;
-            Player.ClearBitmap();
+            Player.Source = null;
             Player.Source = source;
         }
         if (ImagePlanet.LoadedSource == null)
         {
             var source = ImagePlanet.Source;
-            ImagePlanet.ClearBitmap();
+            ImagePlanet.Source = null;
             ImagePlanet.Source = source;
         }
+#endif
 
         //prebuilt reusable sprites pools
         Parallel.Invoke(
