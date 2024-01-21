@@ -62,7 +62,7 @@
         StrokeColor="Black"
         StrokeWidth="2"
         TextColor="White"
-        UseCache="GPU"
+        UseCache="ImageDoubleBuffered"
         ZIndex="110">
 
         <draw:SkiaControl.UseCache>
@@ -105,7 +105,7 @@
         StrokeColor="Black"
         StrokeWidth="2"
         TextColor="White"
-        UseCache="GPU"
+        UseCache="ImageDoubleBuffered"
         ZIndex="110">
 
         <draw:SkiaControl.UseCache>
@@ -162,13 +162,7 @@
         UseCache="ImageDoubleBuffered"
         VerticalOptions="End"
         WidthRequest="110"
-        ZIndex="4" >
-        <!--<draw:SkiaControl.UseCache>
-            <OnPlatform x:TypeArguments="draw:SkiaCacheType">
-                <On Platform="WinUI">None</On>
-            </OnPlatform>
-        </draw:SkiaControl.UseCache>-->
-    </draw:SkiaLottie>
+        ZIndex="4" />
 
     <!--  PLAYER SHIELD  -->
     <draw:SkiaLottie
@@ -210,14 +204,7 @@
         UseCache="GPU"
         VerticalOffset="26"
         VerticalOptions="End"
-        ZIndex="1">
-        <!--<draw:SkiaControl.UseCache>
-            <OnPlatform x:TypeArguments="draw:SkiaCacheType">
-                <On Platform="WinUI">Operations</On>
-            </OnPlatform>
-        </draw:SkiaControl.UseCache>-->
-    </draw:SkiaImage>
-
+        ZIndex="1"/>
 
     <!--  DIALOG  -->
     <draw:SkiaLayout

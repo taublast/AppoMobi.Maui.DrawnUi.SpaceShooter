@@ -36,6 +36,11 @@ namespace SpaceShooter
                 }
             });
 
+#if WINDOWS
+            // game mode !!!
+            Thread.CurrentThread.Priority = ThreadPriority.Highest;
+#endif
+
 #if DEBUG
             builder.Logging.AddDebug();
 #endif

@@ -18,9 +18,9 @@ public partial class SpaceShooter
                 WidthRequest = 150,
                 LockRatio = 1,
 #if WINDOWS
-                UseCache = SkiaCacheType.Operations,
-#else
                 UseCache = SkiaCacheType.None,
+#else
+                UseCache = SkiaCacheType.ImageDoubleBuffered,
 #endif
                 Source = $"Space/Lottie/explosion.json"
             };

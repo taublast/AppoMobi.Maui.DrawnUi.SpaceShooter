@@ -35,7 +35,7 @@ public partial class SpaceShooter : MauiGame
     /// <summary>
     /// Base pause between enemy spawns
     /// </summary>
-    const float DEFAULT_PAUSE_ENEMY_SPAWN = 1.5f;
+    const float DEFAULT_PAUSE_ENEMY_SPAWN = 1.75f;
 
     /// <summary>
     /// For long running profiling

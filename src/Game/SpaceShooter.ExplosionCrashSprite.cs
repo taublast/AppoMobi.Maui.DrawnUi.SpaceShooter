@@ -20,9 +20,9 @@ public partial class SpaceShooter
                 SpeedRatio = 0.6f,
                 Repeat = 0,
 #if WINDOWS
-                UseCache = SkiaCacheType.Operations,
-#else
                 UseCache = SkiaCacheType.None,
+#else
+                UseCache = SkiaCacheType.ImageDoubleBuffered,
 #endif
                 Source = $"Space/Lottie/crash.json"
             };
