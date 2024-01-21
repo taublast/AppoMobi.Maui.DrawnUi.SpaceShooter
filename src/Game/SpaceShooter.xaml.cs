@@ -1,13 +1,14 @@
 // NOTE: Parts of the code below are based on
 // https://www.mooict.com/wpf-c-tutorial-create-a-space-battle-shooter-game-in-visual-studio/7/
 
-using AppoMobi.Maui.DrawnUi;
-using AppoMobi.Maui.DrawnUi.Draw;
-using AppoMobi.Maui.DrawnUi.Drawn.Infrastructure.Interfaces;
 using AppoMobi.Maui.Gestures;
 using AppoMobi.Specials;
+using DrawnUi.Maui.Draw;
+using DrawnUi.Maui.Drawn.Infrastructure.Interfaces;
 using SkiaSharp;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Windows.Input;
 
 namespace SpaceShooter.Game;
 
@@ -48,15 +49,164 @@ public partial class SpaceShooter : MauiGame
 
     #endregion
 
-    #region GAME LOOP
+    #region INITIALIZE
 
-    List<SkiaControl> _spritesToBeRemoved = new(128);
+    public SpaceShooter()
+    {
+        InitializeComponent();
 
-    Queue<SkiaControl> _spritesToBeRemovedLater = new(128);
+        BindingContext = this;
+    }
 
-    List<SkiaControl> _spritesToBeAdded = new(128);
+    protected override void OnBindingContextChanged()
+    {
+        base.OnBindingContextChanged();
 
-    List<SkiaControl> _startAnimations = new(MAX_EXPLOSIONS);
+        BindingContext = this; //insist in case parent view might set its own
+    }
+
+    protected override void OnLayoutReady()
+    {
+        base.OnLayoutReady();
+
+        Task.Run(async () =>
+        {
+            while (Superview == null || !Superview.HasHandler)
+            {
+                await Task.Delay(30);
+            }
+
+            //we have some GPU cache used so we need the canvas to be fully created before we would start
+            Initialize();  //game loop will be started inside
+
+        }).ConfigureAwait(false);
+    }
+
+    void Initialize()
+    {
+        if (!Superview.HasHandler || _initialized)
+            return;
+
+        RndExtensions.RandomizeTime(); //amstrad cpc forever
+
+        IgnoreChildrenInvalidations = true;
+
+        // in case we implement key press for desktop
+        Focus();
+
+        //prebuilt reusable sprites pools
+        Parallel.Invoke(
+            () =>
+            {
+                for (int i = 0; i < MAX_ENEMIES; i++)
+                {
+                    AddToPoolEnemySprite();
+                }
+            },
+            () =>
+            {
+                for (int i = 0; i < MAX_EXPLOSIONS; i++)
+                {
+                    AddToPoolExplosionSprite();
+                }
+            },
+            () =>
+            {
+                for (int i = 0; i < MAX_EXPLOSIONS; i++)
+                {
+                    AddToPoolExplosionCrashSprite();
+                }
+            },
+            () =>
+            {
+                for (int i = 0; i < MAX_BULLETS; i++)
+                {
+                    AddToPoolBulletSprite();
+                }
+            }
+        );
+
+        PlayerShieldExplosion.GoToEnd(); //hide
+
+        _needPrerender = true;
+
+        _initialized = true;
+
+        PresentGame();
+    }
+
+    protected override void Draw(SkiaDrawingContext context, SKRect destination, float scale)
+    {
+        base.Draw(context, destination, scale);
+
+        if (_needPrerender)
+        {
+            //prerender or precompile something like shaders etc
+            // ...
+
+            _needPrerender = false;
+        }
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    void AddToPoolExplosionCrashSprite()
+    {
+        var explosionCrash = ExplosionCrashSprite.Create();
+
+        explosionCrash.Finished += (s, a) =>
+        {
+            RemoveReusable(explosionCrash);
+        };
+
+        ExplosionsCrashPool.Add(explosionCrash.Uid, explosionCrash);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    void AddToPoolExplosionSprite()
+    {
+        var explosion = ExplosionSprite.Create();
+
+        explosion.Finished += (s, a) =>
+        {
+            RemoveReusable(explosion);
+        };
+
+        ExplosionsPool.Add(explosion.Uid, explosion);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    void AddToPoolBulletSprite()
+    {
+        var sprite = BulletSprite.Create();
+        BulletsPool.Add(sprite.Uid, sprite);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    void AddToPoolEnemySprite()
+    {
+        var enemy = EnemySprite.Create();
+        EnemiesPool.Add(enemy.Uid, enemy);
+    }
+
+    protected override void OnChildAdded(SkiaControl child)
+    {
+        if (_initialized)
+            return; //do not care
+
+        base.OnChildAdded(child);
+    }
+
+    protected override void OnChildRemoved(SkiaControl child)
+    {
+        if (_initialized)
+            return; //do not care
+
+        base.OnChildRemoved(child);
+    }
+
+    #endregion
+
+    #region GAME LOGIC
 
     public override void GameLoop(float deltaMs)
     {
@@ -225,6 +375,23 @@ public partial class SpaceShooter : MauiGame
 
     }
 
+    public ICommand CommandPressedOk
+    {
+        get
+        {
+            return new Command(async (context) =>
+            {
+                if (TouchEffect.CheckLockAndSet())
+                    return;
+
+                if (State == GameState.Ready || State == GameState.Ended)
+                {
+                    StartNewGame();
+                }
+            });
+        }
+    }
+
     private GameState _gameState;
     public GameState State
     {
@@ -244,179 +411,26 @@ public partial class SpaceShooter : MauiGame
 
     #endregion
 
-    #region INITIALIZE
-
-    public SpaceShooter()
-    {
-        InitializeComponent();
-
-        BindingContext = this;
-    }
-
-    protected override void OnBindingContextChanged()
-    {
-        base.OnBindingContextChanged();
-
-        BindingContext = this; //insist in case parent view might set its own
-    }
-
-    protected override void OnLayoutReady()
-    {
-        base.OnLayoutReady();
-
-        Task.Run(async () =>
-        {
-            while (Superview == null || !Superview.HasHandler)
-            {
-                await Task.Delay(30);
-            }
-
-            //we have some GPU cache used so we need the canvas to be fully created before we would start
-            Initialize();  //game loop will be started inside
-
-        }).ConfigureAwait(false);
-    }
-
-    void Initialize()
-    {
-        if (!Superview.HasHandler || _initialized)
-            return;
-
-        RndExtensions.RandomizeTime(); //amstrad cpc forever
-
-        IgnoreChildrenInvalidations = true;
-
-        // in case we implement key press for desktop
-        Focus();
-
-        //prebuilt reusable sprites pools
-        Parallel.Invoke(
-            () =>
-            {
-                for (int i = 0; i < MAX_ENEMIES; i++)
-                {
-                    AddToPoolEnemySprite();
-                }
-            },
-            () =>
-            {
-                for (int i = 0; i < MAX_EXPLOSIONS; i++)
-                {
-                    AddToPoolExplosionSprite();
-                }
-            }, 
-            () =>
-            {
-                for (int i = 0; i < MAX_EXPLOSIONS; i++)
-                {
-                    AddToPoolExplosionCrashSprite();
-                }
-            }, 
-            () =>
-            {
-                for (int i = 0; i < MAX_BULLETS; i++)
-                {
-                    AddToPoolBulletSprite();
-                }
-            }
-        );
-
-        PlayerShieldExplosion.GoToEnd(); //hide
-
-        _needPrerender = true;
-
-        _initialized = true;
-
-        StartNewGame();
-    }
-
-    protected override void Draw(SkiaDrawingContext context, SKRect destination, float scale)
-    {
-        base.Draw(context, destination, scale);
-
-        if (_needPrerender)
-        {
-            //prerender or precompile something like shaders etc
-            // ...
-
-            _needPrerender = false;
-        }
-    }
-
-    /// <summary>
-    /// Score can change several times per frame
-    /// so we dont want bindings to update the score toooften.
-    /// Instead we update the display manually once after the frame is finalized.
-    /// </summary>
-    void UpdateScore()
-    {
-        LabelScore.Text = ScoreLocalized;
-        LabelHiScore.Text = HiScoreLocalized;
-    }
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    void AddToPoolExplosionCrashSprite()
-    {
-        var explosionCrash = ExplosionCrashSprite.Create();
-
-        explosionCrash.Finished += (s, a) =>
-        {
-            RemoveReusable(explosionCrash);
-        };
-
-        ExplosionsCrashPool.Add(explosionCrash.Uid, explosionCrash);
-    }
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    void AddToPoolExplosionSprite()
-    {
-        var explosion = ExplosionSprite.Create();
-
-        explosion.Finished += (s, a) =>
-        {
-            RemoveReusable(explosion);
-        };
-
-        ExplosionsPool.Add(explosion.Uid, explosion);
-    }
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    void AddToPoolBulletSprite()
-    {
-        var sprite = BulletSprite.Create();
-        BulletsPool.Add(sprite.Uid, sprite);
-    }
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    void AddToPoolEnemySprite()
-    {
-        var enemy = EnemySprite.Create();
-        EnemiesPool.Add(enemy.Uid, enemy);
-    }
-
-    protected override void OnChildAdded(SkiaControl child)
-    {
-        if (_initialized)
-            return; //do not care
-
-        base.OnChildAdded(child);
-    }
-
-    protected override void OnChildRemoved(SkiaControl child)
-    {
-        if (_initialized)
-            return; //do not care
-
-        base.OnChildRemoved(child);
-    }
-
-    #endregion
-
-    #region METHODS
+    #region ACTIONS
 
     void Fire()
     {
         AddBullet();
+    }
+
+    void PresentGame()
+    {
+        var message = "defend planet earth from crazy alien ships!";
+#if WINDOWS || MACCATALYST
+        message += "\nuse arrows or mouse to move, click or press space to fire.";
+#endif
+
+        DialogButton = "okay".ToUpperInvariant();
+        DialogMessage = message.ToUpperInvariant();
+
+        ShowDialog = true;
+
+        State = GameState.Ready;
     }
 
     void StartNewGame()
@@ -436,7 +450,7 @@ public partial class SpaceShooter : MauiGame
         _pauseEnemyCreation = DEFAULT_PAUSE_ENEMY_SPAWN;
         Score = 0;
         Health = 100;
-        GameOver.IsVisible = false;
+        ShowDialog = false;
         State = GameState.Playing;
 
         UpdateScore();
@@ -446,8 +460,13 @@ public partial class SpaceShooter : MauiGame
 
     void EndGameLost()
     {
+        // todo localize
+        DialogButton = "okay".ToUpperInvariant();
+        DialogMessage = "the shield was broken!\ngood luck next time captain!".ToUpperInvariant();
+
         EndGameInternal();
-        GameOver.IsVisible = true;
+
+        ShowDialog = true;
     }
 
     void EndGameWin()
@@ -601,7 +620,10 @@ public partial class SpaceShooter : MauiGame
         }
         else if (sprite is EnemySprite enemy)
         {
-            EnemiesPool.TryAdd(enemy.Uid, enemy);
+            if (!EnemiesPool.TryAdd(enemy.Uid, enemy))
+            {
+                Trace.WriteLine($"[ADD] FAILED enemy");
+            }
         }
         else
         if (sprite is ExplosionSprite explosion)
@@ -725,15 +747,6 @@ public partial class SpaceShooter : MauiGame
         SKPoint childOffset, SKPoint childOffsetDirect, ISkiaGestureListener alreadyConsumed)
     {
 
-        if (touchAction == TouchActionResult.Tapped)
-        {
-            if (State == GameState.Ended)
-            {
-                StartNewGame();
-            }
-            return this;
-        }
-
         if (State == GameState.Playing)
         {
             var velocityX = (float)(args.Distance.Velocity.X / RenderingScale);
@@ -748,7 +761,12 @@ public partial class SpaceShooter : MauiGame
             {
                 moveLeft = false;
                 moveRight = false;
-                if (!_wasPanning) //custom tapped event
+
+                // custom tapped event
+                // we are not using TouchActionResult.Tapped here because it has some UI related
+                // logic and might sometimes not trigger if we move the finger too much
+                // while we need just spamming taps
+                if (!_wasPanning)
                 {
                     Fire();
                 }
@@ -780,6 +798,51 @@ public partial class SpaceShooter : MauiGame
     #endregion
 
     #region HUD
+
+    /// <summary>
+    /// Score can change several times per frame
+    /// so we dont want bindings to update the score toooften.
+    /// Instead we update the display manually once after the frame is finalized.
+    /// </summary>
+    void UpdateScore()
+    {
+        LabelScore.Text = ScoreLocalized;
+        LabelHiScore.Text = HiScoreLocalized;
+    }
+
+    private string _DialogMessage;
+    public string DialogMessage
+    {
+        get
+        {
+            return _DialogMessage;
+        }
+        set
+        {
+            if (_DialogMessage != value)
+            {
+                _DialogMessage = value;
+                OnPropertyChanged();
+            }
+        }
+    }
+
+    private string _DialogButton = "OK"; //can localize
+    public string DialogButton
+    {
+        get
+        {
+            return _DialogButton;
+        }
+        set
+        {
+            if (_DialogButton != value)
+            {
+                _DialogButton = value;
+                OnPropertyChanged();
+            }
+        }
+    }
 
     private double _health = 100;
     public double Health
@@ -855,6 +918,23 @@ public partial class SpaceShooter : MauiGame
         }
     }
 
+    private bool _ShowDialog;
+    public bool ShowDialog
+    {
+        get
+        {
+            return _ShowDialog;
+        }
+        set
+        {
+            if (_ShowDialog != value)
+            {
+                _ShowDialog = value;
+                OnPropertyChanged();
+            }
+        }
+    }
+
     #endregion
 
     #region VARIABLES
@@ -870,6 +950,10 @@ public partial class SpaceShooter : MauiGame
 
     protected Dictionary<Guid, ExplosionCrashSprite> ExplosionsCrashPool = new(MAX_EXPLOSIONS);
 
+    private List<SkiaControl> _spritesToBeRemoved = new(128);
+    private Queue<SkiaControl> _spritesToBeRemovedLater = new(128);
+    private List<SkiaControl> _spritesToBeAdded = new(128);
+    private List<SkiaControl> _startAnimations = new(MAX_EXPLOSIONS);
     private float _pauseEnemyCreation;
     private SKRect _playerHitBox = new();
     private bool _needPrerender;

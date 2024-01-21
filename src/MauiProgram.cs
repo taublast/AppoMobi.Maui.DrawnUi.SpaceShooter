@@ -1,4 +1,4 @@
-﻿using AppoMobi.Maui.DrawnUi.Infrastructure.Extensions;
+﻿global using DrawnUi.Maui;
 using Microsoft.Extensions.Logging;
 
 

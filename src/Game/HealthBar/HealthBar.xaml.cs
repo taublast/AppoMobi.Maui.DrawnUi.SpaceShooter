@@ -1,4 +1,4 @@
-using AppoMobi.Maui.DrawnUi.Draw;
+using DrawnUi.Maui.Draw;
 using System.Runtime.CompilerServices;
 
 namespace SpaceShooter.Game;

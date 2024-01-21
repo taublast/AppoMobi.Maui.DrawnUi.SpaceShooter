@@ -1,5 +1,4 @@
-using AppoMobi.Maui.DrawnUi.Draw;
-using AppoMobi.Maui.DrawnUi.Enums;
+using DrawnUi.Maui.Draw;
 
 namespace SpaceShooter.Game;
 
@@ -18,7 +17,11 @@ public partial class SpaceShooter
                 SpeedRatio = 1.5,
                 WidthRequest = 150,
                 LockRatio = 1,
+#if WINDOWS
+                UseCache = SkiaCacheType.Operations,
+#else
                 UseCache = SkiaCacheType.None,
+#endif
                 Source = $"Space/Lottie/explosion.json"
             };
             explosion.ResetAnimationState();

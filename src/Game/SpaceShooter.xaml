@@ -60,10 +60,17 @@
         HorizontalOptions="Start"
         MaxLines="1"
         StrokeColor="Black"
-        StrokeWidth="3"
+        StrokeWidth="4"
         TextColor="White"
         UseCache="GPU"
         ZIndex="110">
+
+        <draw:SkiaControl.UseCache>
+            <OnPlatform x:TypeArguments="draw:SkiaCacheType">
+                <On Platform="WinUI">Operations</On>
+            </OnPlatform>
+        </draw:SkiaControl.UseCache>
+
         <draw:SkiaLabel.FillGradient>
 
             <draw:SkiaGradient
@@ -96,10 +103,17 @@
         MaxLines="1"
         Opacity="0.9"
         StrokeColor="Black"
-        StrokeWidth="3"
+        StrokeWidth="4"
         TextColor="White"
         UseCache="GPU"
         ZIndex="110">
+
+        <draw:SkiaControl.UseCache>
+            <OnPlatform x:TypeArguments="draw:SkiaCacheType">
+                <On Platform="WinUI">Operations</On>
+            </OnPlatform>
+        </draw:SkiaControl.UseCache>
+
         <draw:SkiaLabel.FillGradient>
 
             <draw:SkiaGradient
@@ -145,7 +159,7 @@
         Tag="ShieldExplosion"
         TranslationX="0"
         TranslationY="-44"
-        UseCache="None"
+        UseCache="ImageDoubleBuffered"
         VerticalOptions="End"
         WidthRequest="110"
         ZIndex="4" />
@@ -190,24 +204,27 @@
         UseCache="GPU"
         VerticalOffset="26"
         VerticalOptions="End"
-        ZIndex="1" />
+        ZIndex="1">
+        <draw:SkiaControl.UseCache>
+            <OnPlatform x:TypeArguments="draw:SkiaCacheType">
+                <On Platform="WinUI">Operations</On>
+            </OnPlatform>
+        </draw:SkiaControl.UseCache>
+    </draw:SkiaImage>
 
-    <!--  GAME OVER  -->
+
     <!--  DIALOG  -->
     <draw:SkiaLayout
-        x:Name="GameOver"
         Margin="50"
         HeightRequest="-1"
         HorizontalOptions="Center"
-        IsVisible="False"
+        IsVisible="{Binding ShowDialog}"
         MinimumHeightRequest="50"
-        UseCache="GPU"
+        MinimumWidthRequest="300"
         VerticalOptions="Center"
-        WidthRequest="300"
         ZIndex="200">
 
-        <!--  static shadow+texture  -->
-        <!--  cached GPU  -->
+        <!--  background layer dynamic  -->
         <draw:SkiaLayout
             Padding="16"
             HorizontalOptions="Fill"
@@ -216,12 +233,37 @@
             ZIndex="-1">
 
             <draw:SkiaShape
-                BackgroundColor="#33000000"
                 CornerRadius="14"
+                HorizontalOptions="Fill"
+                VerticalOptions="Fill">
+
+                <draw:SkiaBackdrop
+                    BackgroundColor="#22000000"
+                    Blur="8"
+                    HorizontalOptions="Fill"
+                    Tag="Blur"
+                    VerticalOptions="Fill"
+                    ZIndex="-1" />
+
+            </draw:SkiaShape>
+
+        </draw:SkiaLayout>
+
+        <!--  front layer cached  -->
+        <draw:SkiaLayout
+            Padding="17"
+            HorizontalOptions="Fill"
+            UseCache="GPU">
+
+            <draw:SkiaShape
+                Margin="0"
+                BackgroundColor="Black"
+                ClipBackgroundColor="True"
+                CornerRadius="17"
                 HorizontalOptions="Fill"
                 StrokeColor="Black"
                 StrokeWidth="2"
-                VerticalOptions="Fill">
+                VerticalOptions="Start">
 
                 <draw:SkiaShape.StrokeGradient>
 
@@ -239,110 +281,101 @@
 
                 </draw:SkiaShape.StrokeGradient>
 
-            </draw:SkiaShape>
+                <draw:SkiaControl.Shadows>
+                    <draw:SkiaShadow
+                        Blur="8"
+                        Opacity="0.15"
+                        X="0"
+                        Y="0"
+                        Color="#00ff00" />
 
-        </draw:SkiaLayout>
-
-        <draw:SkiaShape
-            Margin="17"
-            BackgroundColor="#99000000"
-            ClipBackgroundColor="True"
-            CornerRadius="17"
-            HorizontalOptions="Fill"
-            VerticalOptions="Start">
-
-            <draw:SkiaLayout
-                HorizontalOptions="Fill"
-                VerticalOptions="Start">
-
-                <draw:SkiaBackdrop
-                    Blur="5"
-                    HorizontalOptions="Fill"
-                    Tag="Blur"
-                    VerticalOptions="Fill"
-                    ZIndex="-1">
-
-                </draw:SkiaBackdrop>
+                </draw:SkiaControl.Shadows>
 
                 <draw:SkiaLayout
-                    Padding="16,20,16,24"
                     HorizontalOptions="Fill"
-                    Spacing="24"
-                    Type="Column"
                     VerticalOptions="Start">
 
-                    <draw:SkiaLabel
-                        CharacterSpacing="2.5"
-                        DrawCharByChar="True"
-                        FontFamily="FontGameExtraBold"
-                        FontSize="20"
-                        HorizontalOptions="Center"
-                        HorizontalTextAlignment="Center"
-                        LineSpacing="1.2"
-                        StrokeColor="#2033FF44"
-                        StrokeWidth="3"
-                        Text="SHIELD BROKEN! GOOD LUCK NEXT TIME CAPTAIN!"
-                        TextColor="#33FF44"
+                    <draw:SkiaImage
+                        Aspect="AspectCover"
+                        HorizontalOptions="Fill"
+                        Opacity="0.25"
+                        Source="Space/Sprites/nebula.jpg"
+                        VerticalOptions="Fill"
+                        ZIndex="-1" />
+
+                    <!--  StackLayout  -->
+                    <draw:SkiaLayout
+                        Padding="16,20,16,24"
+                        HorizontalOptions="Fill"
+                        Spacing="24"
+                        Type="Column"
                         VerticalOptions="Start">
-                        <draw:SkiaLabel.FillGradient>
-
-                            <draw:SkiaGradient
-                                EndXRatio="0"
-                                EndYRatio="1"
-                                StartXRatio="0"
-                                StartYRatio="0"
-                                Type="Linear">
-                                <draw:SkiaGradient.Colors>
-                                    <Color>White</Color>
-                                    <Color>Yellow</Color>
-                                    <Color>Orange</Color>
-                                    <Color>Red</Color>
-                                    <Color>DarkRed</Color>
-                                </draw:SkiaGradient.Colors>
-                            </draw:SkiaGradient>
-
-                        </draw:SkiaLabel.FillGradient>
-                    </draw:SkiaLabel>
-
-                    <draw:SkiaShape
-                        BackgroundColor="#22000000"
-                        CornerRadius="8"
-                        HeightRequest="34"
-                        HorizontalOptions="Center"
-                        StrokeColor="#cc33FF44"
-                        StrokeWidth="1"
-                        WidthRequest="90">
 
                         <draw:SkiaLabel
                             CharacterSpacing="2.5"
-                            DrawCharByChar="True"
-                            FontFamily="FontGameMedium"
-                            FontSize="16"
+                            FontFamily="FontGameExtraBold"
+                            FontSize="20"
                             HorizontalOptions="Center"
                             HorizontalTextAlignment="Center"
-                            StrokeColor="#2033FF44"
-                            StrokeWidth="2"
-                            Text="OK"
-                            TextColor="#cc33FF44"
-                            VerticalOptions="Center" />
+                            LineSpacing="1.2"
+                            StrokeColor="#44FF0000"
+                            StrokeWidth="3"
+                            Text="{Binding DialogMessage}"
+                            TextColor="#33FF44"
+                            VerticalOptions="Start">
+                            <draw:SkiaLabel.FillGradient>
 
-                    </draw:SkiaShape>
+                                <draw:SkiaGradient
+                                    EndXRatio="0"
+                                    EndYRatio="1"
+                                    StartXRatio="0"
+                                    StartYRatio="0"
+                                    Type="Linear">
+                                    <draw:SkiaGradient.Colors>
+                                        <Color>White</Color>
+                                        <Color>Yellow</Color>
+                                        <Color>Orange</Color>
+                                        <Color>Red</Color>
+                                        <Color>DarkRed</Color>
+                                    </draw:SkiaGradient.Colors>
+                                </draw:SkiaGradient>
+
+                            </draw:SkiaLabel.FillGradient>
+                        </draw:SkiaLabel>
+
+                        <!--  BUTTON  -->
+                        <draw:SkiaShape
+                            draw:AddGestures.CommandTapped="{Binding CommandPressedOk}"
+                            BackgroundColor="#33000000"
+                            CornerRadius="8"
+                            HeightRequest="34"
+                            HorizontalOptions="Center"
+                            StrokeColor="#cc33FF44"
+                            StrokeWidth="1"
+                            WidthRequest="90">
+
+                            <draw:SkiaLabel
+                                CharacterSpacing="1.75"
+                                FontFamily="FontGameMedium"
+                                FontSize="16"
+                                HorizontalOptions="Center"
+                                HorizontalTextAlignment="Center"
+                                StrokeColor="#2233FF44"
+                                StrokeWidth="3"
+                                Text="{Binding DialogButton}"
+                                TextColor="#cc33FF44"
+                                VerticalOptions="Center" />
+
+                        </draw:SkiaShape>
+
+                    </draw:SkiaLayout>
 
                 </draw:SkiaLayout>
 
-            </draw:SkiaLayout>
+            </draw:SkiaShape>
 
-            <draw:SkiaControl.Shadows>
-                <draw:SkiaShadow
-                    Blur="5"
-                    Opacity="0.33"
-                    X="0"
-                    Y="0"
-                    Color="#00ff00" />
 
-            </draw:SkiaControl.Shadows>
-
-        </draw:SkiaShape>
+        </draw:SkiaLayout>
 
     </draw:SkiaLayout>
 

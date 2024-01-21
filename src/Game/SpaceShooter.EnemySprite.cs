@@ -1,9 +1,8 @@
 // NOTE: Parts of the code below are based on
 // https://www.mooict.com/wpf-c-tutorial-create-a-space-battle-shooter-game-in-visual-studio/7/
 
-using AppoMobi.Maui.DrawnUi.Draw;
-using AppoMobi.Maui.DrawnUi.Enums;
 using AppoMobi.Specials;
+using DrawnUi.Maui.Draw;
 using SkiaSharp;
 
 namespace SpaceShooter.Game;
@@ -13,6 +12,32 @@ public partial class SpaceShooter
     public class EnemySprite : SkiaImage, IWithHitBox, IReusableSprite
     {
         public static float Speed = 50f;
+
+        public static EnemySprite Create()
+        {
+            var enemySpriteCounter = RndExtensions.CreateRandom(1, 5);
+
+            var newEnemy = new EnemySprite()
+            {
+                Source = $"{SpritesPath}/{enemySpriteCounter}.png", //random image
+                SpeedRatio = 0.9f + enemySpriteCounter * 2 / 10f, //random speed
+                ColorTint = Color.Parse("#22110022"), //tinted a bit for our game
+                ZIndex = 4,
+#if WINDOWS
+                UseCache = SkiaCacheType.Operations,
+#else
+                UseCache = SkiaCacheType.GPU,
+#endif
+                WidthRequest = 50,
+                HeightRequest = 44,
+                Effect = SkiaImageEffect.Tint,
+                EffectBlendMode = SKBlendMode.SrcATop,
+            };
+
+            newEnemy.ResetAnimationState();
+
+            return newEnemy;
+        }
 
         public void UpdateState(long time)
         {
@@ -32,28 +57,6 @@ public partial class SpaceShooter
         public bool IsActive { get; set; }
 
         public float SpeedRatio { get; set; }
-
-        public static EnemySprite Create()
-        {
-            var enemySpriteCounter = RndExtensions.CreateRandom(1, 5);
-
-            var newEnemy = new EnemySprite()
-            {
-                Source = $"{SpritesPath}/{enemySpriteCounter}.png", //random image
-                SpeedRatio = 0.9f + enemySpriteCounter * 2 / 10f, //random speed
-                ColorTint = Color.Parse("#22110022"), //tinted a bit for our game
-                ZIndex = 4,
-                UseCache = SkiaCacheType.GPU,
-                WidthRequest = 50,
-                HeightRequest = 44,
-                Effect = SkiaImageEffect.Tint,
-                EffectBlendMode = SKBlendMode.SrcATop,
-            };
-
-            newEnemy.ResetAnimationState();
-
-            return newEnemy;
-        }
 
         public void ResetAnimationState()
         {

@@ -10,9 +10,9 @@
     CornerRadius="3"
     HeightRequest="6"
     HorizontalOptions="Fill"
-    StrokeColor="Black"
-    StrokeWidth="1.0"
     IgnoreChildrenInvalidations="True"
+    StrokeColor="Black"
+    StrokeWidth="0.75"
     Tag="Health">
 
     <draw:SkiaShape.FillGradient>
@@ -34,7 +34,7 @@
 
             <draw:SkiaGradient.ColorPositions>
                 <x:Double>0.0</x:Double>
-                <x:Double>0.05</x:Double>
+                <x:Double>0.3</x:Double>
                 <x:Double>0.4</x:Double>
                 <x:Double>1.0</x:Double>
             </draw:SkiaGradient.ColorPositions>
@@ -42,24 +42,6 @@
         </draw:SkiaGradient>
 
     </draw:SkiaShape.FillGradient>
-
-    <draw:SkiaShape.Shadows>
-
-        <draw:SkiaShadow
-            Blur="1.5"
-            Opacity="0.15"
-            X="2.5"
-            Y="2.5"
-            Color="#FFFFFF" />
-
-        <draw:SkiaShadow
-            Blur="1.5"
-            Opacity="0.49"
-            X="-2.5"
-            Y="-2.5"
-            Color="#000000" />
-
-    </draw:SkiaShape.Shadows>
 
     <draw:SkiaShape.StrokeGradient>
 
@@ -101,7 +83,7 @@
                 Type="Linear">
                 <draw:SkiaGradient.Colors>
                     <Color>#00000022</Color>
-                    <Color>#66000022</Color>
+                    <Color>#000022</Color>
                     <Color>#000022</Color>
                 </draw:SkiaGradient.Colors>
 

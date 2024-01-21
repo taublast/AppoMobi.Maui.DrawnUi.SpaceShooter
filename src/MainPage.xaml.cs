@@ -1,6 +1,4 @@
-﻿using AppoMobi.Maui.DrawnUi;
-
-namespace SpaceShooter
+﻿namespace SpaceShooter
 {
 
     public partial class MainPage

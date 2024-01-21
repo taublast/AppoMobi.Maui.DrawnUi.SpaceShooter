@@ -21,7 +21,7 @@ For Windows and Mac Catalyst, hardware acceleration is not yet implemented, but 
 
 For desktop we implemented non-resizable windows and they receive platform-independent key events. Destop windows can be dragged among different displays dinamically adapting to their scale. 
 
-[DrawnUi](https://github.com/taublast/AppoMobi.Maui.DrawnUi.Demo) pre-alpha nuget was used, the rendering engine for .Net MAUI designed to draw your custom UI on the Skia canvas.
+[DrawnUI](https://github.com/taublast/AppoMobi.Maui.DrawnUi.Demo) pre-alpha nuget was used, the rendering engine for .NET MAUI designed to draw your custom UI on the Skia canvas.
 
 ## _Final Words_
 
