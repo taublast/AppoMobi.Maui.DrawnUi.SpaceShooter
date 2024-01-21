@@ -136,7 +136,7 @@
 
     <!--  PLAYER  -->
     <draw:SkiaImage
-        x:Name="player"
+        x:Name="Player"
         Aspect="AspectFitFill"
         HeightRequest="50"
         HorizontalOptions="Center"
@@ -196,6 +196,7 @@
 
     <!--  MOTHER EARTH  -->
     <draw:SkiaImage
+        x:Name="ImagePlanet"
         Aspect="AspectCover"
         HeightRequest="45"
         HorizontalOptions="Fill"

@@ -27,12 +27,13 @@ namespace SpaceShooter
 
             builder.UseDrawnUi(new()
             {
-                UseDesktopKeyboard = true, //capture keys on destop
+                UseDesktopKeyboard = true, //capture keys on desktop
                 DesktopWindow = new()
                 {
                     Width = 500,
                     Height = 700,
                     IsFixedSize = true //user cannot resize window
+                    //todo disable maximize btn 
                 }
             });
 

@@ -94,6 +94,21 @@ public partial class SpaceShooter : MauiGame
         // in case we implement key press for desktop
         Focus();
 
+        //avoiding wierd bug when deployed for the first time on win/catalyst
+        //images in xaml not loaded from resources:
+        if (Player.LoadedSource == null)
+        {
+            var source = Player.Source;
+            Player.ClearBitmap();
+            Player.Source = source;
+        }
+        if (ImagePlanet.LoadedSource == null)
+        {
+            var source = ImagePlanet.Source;
+            ImagePlanet.ClearBitmap();
+            ImagePlanet.Source = source;
+        }
+
         //prebuilt reusable sprites pools
         Parallel.Invoke(
             () =>
@@ -218,10 +233,10 @@ public partial class SpaceShooter : MauiGame
             ParallaxLayer.TileOffsetY -= STARS_SPEED * deltaMs;
 
             // get the player hit box
-            var playerPosition = player.GetPositionOnCanvasInPoints();
+            var playerPosition = Player.GetPositionOnCanvasInPoints();
 
             _playerHitBox = new SKRect(playerPosition.X, playerPosition.Y,
-                (float)(playerPosition.X + player.Width), (float)(playerPosition.Y + player.Height));
+                (float)(playerPosition.X + Player.Width), (float)(playerPosition.Y + Player.Height));
 
 
             // search for bullets, enemies and collision begins
@@ -325,17 +340,15 @@ public partial class SpaceShooter : MauiGame
             if (moveLeft)
             {
                 // if move left is true AND player is inside the boundary then move player to the left
-                UpdatePlayerPosition(player.TranslationX - PLAYER_SPEED * deltaMs);
+                UpdatePlayerPosition(Player.TranslationX - PLAYER_SPEED * deltaMs);
             }
 
             if (moveRight)
             {
                 // if move right is true AND player left + 90 is less than the width of the form
                 // then move the player to the right
-                UpdatePlayerPosition(player.TranslationX + PLAYER_SPEED * deltaMs);
+                UpdatePlayerPosition(Player.TranslationX + PLAYER_SPEED * deltaMs);
             }
-
-
 
             // if the damage integer is greater than 99
             if (Health < 1)
@@ -501,13 +514,13 @@ public partial class SpaceShooter : MauiGame
 
     void UpdatePlayerPosition(double x)
     {
-        var leftLimit = -Width / 2f + player.Width / 2f;
-        var rightLimit = Width / 2f - player.Width / 2f;
+        var leftLimit = -Width / 2f + Player.Width / 2f;
+        var rightLimit = Width / 2f - Player.Width / 2f;
         var clampedX = Math.Clamp(x, leftLimit, rightLimit);
 
-        if (clampedX != player.TranslationX)
+        if (clampedX != Player.TranslationX)
         {
-            player.TranslationX = clampedX;
+            Player.TranslationX = clampedX;
             PlayerShield.TranslationX = clampedX;
             PlayerShieldExplosion.TranslationX = clampedX;
             HealthBar.TranslationX = clampedX;
@@ -542,8 +555,8 @@ public partial class SpaceShooter : MauiGame
         if (sprite != null && BulletsPool.Remove(sprite.Uid))
         {
             // place the bullet on top of the player location
-            sprite.TranslationX = player.TranslationX;
-            sprite.TranslationY = player.TranslationY - sprite.HeightRequest - player.Height;
+            sprite.TranslationX = Player.TranslationX;
+            sprite.TranslationY = Player.TranslationY - sprite.HeightRequest - Player.Height;
             sprite.IsActive = true;
 
             _spritesToBeAdded.Add(sprite);
@@ -697,12 +710,6 @@ public partial class SpaceShooter : MauiGame
         }
 
         var key = MapToGame(mauiKey);
-
-        if (key == GameKey.Fire && State == GameState.Ended)
-        {
-            StartNewGame();
-            return;
-        }
 
         if (State != GameState.Playing)
             return;
