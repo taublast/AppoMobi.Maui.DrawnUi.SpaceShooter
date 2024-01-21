@@ -12,7 +12,7 @@
     HorizontalOptions="Fill"
     IgnoreChildrenInvalidations="True"
     StrokeColor="Black"
-    StrokeWidth="0.75"
+    StrokeWidth="0.5"
     Tag="Health">
 
     <draw:SkiaShape.FillGradient>

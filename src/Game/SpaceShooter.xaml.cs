@@ -375,23 +375,6 @@ public partial class SpaceShooter : MauiGame
 
     }
 
-    public ICommand CommandPressedOk
-    {
-        get
-        {
-            return new Command(async (context) =>
-            {
-                if (TouchEffect.CheckLockAndSet())
-                    return;
-
-                if (State == GameState.Ready || State == GameState.Ended)
-                {
-                    StartNewGame();
-                }
-            });
-        }
-    }
-
     private GameState _gameState;
     public GameState State
     {
@@ -663,6 +646,23 @@ public partial class SpaceShooter : MauiGame
 
     #region GESTURES AND KEYS
 
+    public ICommand CommandPressedOk
+    {
+        get
+        {
+            return new Command(async (context) =>
+            {
+                if (TouchEffect.CheckLockAndSet())
+                    return;
+
+                if (State == GameState.Ready || State == GameState.Ended)
+                {
+                    StartNewGame();
+                }
+            });
+        }
+    }
+
     /// <summary>
     /// Mappings from platform-independent keys to game action keys.
     /// Player could change these mappings if you implement this in settings.
@@ -690,6 +690,12 @@ public partial class SpaceShooter : MauiGame
 
     public override void OnKeyUp(MauiKey mauiKey)
     {
+        if (mauiKey == MauiKey.Enter && (State == GameState.Ready || State == GameState.Ended))
+        {
+            StartNewGame();
+            return;
+        }
+
         var key = MapToGame(mauiKey);
 
         if (key == GameKey.Fire && State == GameState.Ended)
@@ -697,8 +703,6 @@ public partial class SpaceShooter : MauiGame
             StartNewGame();
             return;
         }
-
-        //todo unpause when pause is implemented
 
         if (State != GameState.Playing)
             return;

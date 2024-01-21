@@ -60,7 +60,7 @@
         HorizontalOptions="Start"
         MaxLines="1"
         StrokeColor="Black"
-        StrokeWidth="4"
+        StrokeWidth="2"
         TextColor="White"
         UseCache="GPU"
         ZIndex="110">
@@ -103,7 +103,7 @@
         MaxLines="1"
         Opacity="0.9"
         StrokeColor="Black"
-        StrokeWidth="4"
+        StrokeWidth="2"
         TextColor="White"
         UseCache="GPU"
         ZIndex="110">
@@ -162,7 +162,13 @@
         UseCache="ImageDoubleBuffered"
         VerticalOptions="End"
         WidthRequest="110"
-        ZIndex="4" />
+        ZIndex="4" >
+        <!--<draw:SkiaControl.UseCache>
+            <OnPlatform x:TypeArguments="draw:SkiaCacheType">
+                <On Platform="WinUI">None</On>
+            </OnPlatform>
+        </draw:SkiaControl.UseCache>-->
+    </draw:SkiaLottie>
 
     <!--  PLAYER SHIELD  -->
     <draw:SkiaLottie
@@ -205,11 +211,11 @@
         VerticalOffset="26"
         VerticalOptions="End"
         ZIndex="1">
-        <draw:SkiaControl.UseCache>
+        <!--<draw:SkiaControl.UseCache>
             <OnPlatform x:TypeArguments="draw:SkiaCacheType">
                 <On Platform="WinUI">Operations</On>
             </OnPlatform>
-        </draw:SkiaControl.UseCache>
+        </draw:SkiaControl.UseCache>-->
     </draw:SkiaImage>
 
 
@@ -262,7 +268,7 @@
                 CornerRadius="17"
                 HorizontalOptions="Fill"
                 StrokeColor="Black"
-                StrokeWidth="2"
+                StrokeWidth="1"
                 VerticalOptions="Start">
 
                 <draw:SkiaShape.StrokeGradient>
@@ -319,7 +325,7 @@
                             HorizontalTextAlignment="Center"
                             LineSpacing="1.2"
                             StrokeColor="#44FF0000"
-                            StrokeWidth="3"
+                            StrokeWidth="1.5"
                             Text="{Binding DialogMessage}"
                             TextColor="#33FF44"
                             VerticalOptions="Start">
@@ -351,7 +357,7 @@
                             HeightRequest="34"
                             HorizontalOptions="Center"
                             StrokeColor="#cc33FF44"
-                            StrokeWidth="1"
+                            StrokeWidth="0.5"
                             WidthRequest="90">
 
                             <draw:SkiaLabel
@@ -361,7 +367,7 @@
                                 HorizontalOptions="Center"
                                 HorizontalTextAlignment="Center"
                                 StrokeColor="#2233FF44"
-                                StrokeWidth="3"
+                                StrokeWidth="1.5"
                                 Text="{Binding DialogButton}"
                                 TextColor="#cc33FF44"
                                 VerticalOptions="Center" />
