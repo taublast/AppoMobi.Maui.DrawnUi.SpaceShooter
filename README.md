@@ -1,4 +1,4 @@
-# Space Shooter Arcade Game Etude built with _.NET MAUI_
+# _.NET MAUI_ Space Shooter Game Etude
 
 ## _The Challenge_
 
@@ -11,7 +11,7 @@ Driven by [one](https://github.com/mooict/WPF-Space-shooter-game) of the awesome
 
 Free [Lottie animations](https://lottiefiles.com/) quickly fulfilled the need for animated content.
 
-This project is intended as an etude, you are fully encouraged to reuse it for creating something exceptional of your own.
+[DrawnUI](https://github.com/taublast/AppoMobi.Maui.DrawnUi.Demo) pre-alpha nuget was used to draw virtual controls on a Skia canvas.
 
 ## _Of Note_
 
@@ -19,9 +19,7 @@ Android and iOS run hardware-accelerated, with iOS using Apple Metal and Android
 
 For Windows and Mac Catalyst, hardware acceleration is not yet implemented, they still run above 100 FPS. 
 
-Desktop versions present non-resizable windows with platform-independent key events. They can be dragged among different displays adapting to new scale. Disabling Maximize button still needs to be implemented.
-
-[DrawnUI](https://github.com/taublast/AppoMobi.Maui.DrawnUi.Demo) pre-alpha nuget was used, the rendering engine for .NET MAUI designed to draw your custom UI on the Skia canvas.
+Desktop versions present non-resizable windows with platform-independent key events. They can be dragged among different displays adapting to new scale. Disabling the maximize button still needs to be implemented.
 
 ## _Final Words_
 
