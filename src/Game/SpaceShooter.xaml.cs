@@ -625,34 +625,21 @@ public partial class SpaceShooter : MauiGame
         // remove from the canvas
         if (sprite is BulletSprite bullet)
         {
-            if (!BulletsPool.TryAdd(bullet.Uid, bullet))
-            {
-                Trace.WriteLine($"[ADD] FAILED");
-            }
+            BulletsPool.TryAdd(bullet.Uid, bullet);
         }
         else if (sprite is EnemySprite enemy)
         {
-            if (!EnemiesPool.TryAdd(enemy.Uid, enemy))
-            {
-                Trace.WriteLine($"[ADD] FAILED enemy");
-            }
+            EnemiesPool.TryAdd(enemy.Uid, enemy);
         }
         else
         if (sprite is ExplosionSprite explosion)
         {
-            if (!ExplosionsPool.TryAdd(explosion.Uid, explosion))
-            {
-                Trace.WriteLine($"[ADD] FAILED");
-            }
+            (!ExplosionsPool.TryAdd(explosion.Uid, explosion);
         }
         else
         if (sprite is ExplosionCrashSprite explosionCrash)
         {
-            if (!ExplosionsCrashPool.TryAdd(explosionCrash.Uid, explosionCrash))
-            {
-                Trace.WriteLine($"[ADD] FAILED");
-            }
-
+            ExplosionsCrashPool.TryAdd(explosionCrash.Uid, explosionCrash);
         }
         RemoveSubView(sprite);
     }
