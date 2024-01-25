@@ -15,6 +15,7 @@
     <!--  STARS BACKGROUND  -->
     <draw:SkiaLayout
         HorizontalOptions="Fill"
+        IsVisible="True"
         UseCache="Image"
         VerticalOptions="Fill"
         ZIndex="-1">
@@ -40,14 +41,13 @@
     <!--  STARS PARALLAX  -->
     <draw:SkiaImageTiles
         x:Name="ParallaxLayer"
+        VerticalOptions="Fill"
         HorizontalOptions="Fill"
-        Opacity="0.75"
         Source="Space/Sprites/stars.png"
         TileAspect="Cover"
-        TileCacheType="Image"
         TileHeight="600"
         TileWidth="600"
-        VerticalOptions="Fill" />
+        TileCacheType="GPU" />
 
     <!--  SCORE  -->
     <draw:SkiaLabel
@@ -62,7 +62,7 @@
         StrokeColor="Black"
         StrokeWidth="2"
         TextColor="White"
-        UseCache="ImageDoubleBuffered"
+        UseCache="GPU"
         ZIndex="110">
 
         <draw:SkiaControl.UseCache>
@@ -105,7 +105,7 @@
         StrokeColor="Black"
         StrokeWidth="2"
         TextColor="White"
-        UseCache="ImageDoubleBuffered"
+        UseCache="GPU"
         ZIndex="110">
 
         <draw:SkiaControl.UseCache>
@@ -188,7 +188,7 @@
         HorizontalOptions="Center"
         Tag="Health"
         TranslationY="-28"
-        UseCache="GPU"
+        UseCache="ImageDoubleBuffered"
         VerticalOptions="End"
         WidthRequest="40"
         ZIndex="6"
@@ -205,7 +205,7 @@
         UseCache="GPU"
         VerticalOffset="26"
         VerticalOptions="End"
-        ZIndex="1"/>
+        ZIndex="1" />
 
     <!--  DIALOG  -->
     <draw:SkiaLayout
@@ -218,11 +218,11 @@
         VerticalOptions="Center"
         ZIndex="200">
 
-        <!--  background layer dynamic  -->
+        <!--  background layer  -->
         <draw:SkiaLayout
             Padding="16"
             HorizontalOptions="Fill"
-            UseCache="None"
+            UseCache="GPU"
             VerticalOptions="Fill"
             ZIndex="-1">
 
@@ -345,7 +345,7 @@
                             HeightRequest="34"
                             HorizontalOptions="Center"
                             StrokeColor="#cc33FF44"
-                            StrokeWidth="0.5"
+                            StrokeWidth="0.55"
                             WidthRequest="90">
 
                             <draw:SkiaLabel

@@ -1,5 +1,3 @@
-using DrawnUi.Maui.Draw;
-
 namespace SpaceShooter.Game;
 
 public partial class SpaceShooter
@@ -19,11 +17,7 @@ public partial class SpaceShooter
                 LockRatio = 1,
                 SpeedRatio = 0.6f,
                 Repeat = 0,
-#if WINDOWS
-                UseCache = SkiaCacheType.None,
-#else
                 UseCache = SkiaCacheType.ImageDoubleBuffered,
-#endif
                 Source = $"Space/Lottie/crash.json"
             };
             explosion.ResetAnimationState();
@@ -32,6 +26,7 @@ public partial class SpaceShooter
 
         public void ResetAnimationState()
         {
+            Seek(0);
             Opacity = 0.5;
             Scale = 1;
         }

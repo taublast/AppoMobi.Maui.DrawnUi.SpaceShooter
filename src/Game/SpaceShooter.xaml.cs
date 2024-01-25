@@ -1,11 +1,10 @@
 // NOTE: Parts of the code below are based on
 // https://www.mooict.com/wpf-c-tutorial-create-a-space-battle-shooter-game-in-visual-studio/7/
 
+global using DrawnUi.Maui.Controls;
+global using SkiaSharp;
 using AppoMobi.Maui.Gestures;
 using AppoMobi.Specials;
-using DrawnUi.Maui.Draw;
-using DrawnUi.Maui.Drawn.Infrastructure.Interfaces;
-using SkiaSharp;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
@@ -56,7 +55,14 @@ public partial class SpaceShooter : MauiGame
         InitializeComponent();
 
         BindingContext = this;
+
+        Instance = this;
     }
+
+    /// <summary>
+    /// So it can get paused/resumed from anywhere in the app
+    /// </summary>
+    public static SpaceShooter Instance { get; set; }
 
     protected override void OnBindingContextChanged()
     {
@@ -82,6 +88,23 @@ public partial class SpaceShooter : MauiGame
         }).ConfigureAwait(false);
     }
 
+    public override void OnAppeared()
+    {
+        base.OnAppeared();
+
+        Tasks.StartDelayed(TimeSpan.FromSeconds(1), () =>
+        {
+
+            //our dialog has a transparent background that is blurring pixels under
+            //we we have 2 options:
+            //do not cache the backdrop to blur in realtime
+            //cache the backdrop but then it must blur after the content below was rendered. so we implement the hack below, knowing our blurred background will be statis as we show it only on pauses:
+
+            _appeared = true;
+            OnPropertyChanged(nameof(ShowDialog));
+        });
+    }
+
     void Initialize()
     {
         if (!Superview.HasHandler || _initialized)
@@ -93,23 +116,6 @@ public partial class SpaceShooter : MauiGame
 
         // in case we implement key press for desktop
         Focus();
-
-#if WINDOWS || MACCATALYST
-        //trying to avoid wierd bug when deployed for the first time on win/catalyst
-        //images in xaml not loaded from resources. todo investigate
-        if (Player.LoadedSource == null)
-        {
-            var source = Player.Source;
-            Player.Source = null;
-            Player.Source = source;
-        }
-        if (ImagePlanet.LoadedSource == null)
-        {
-            var source = ImagePlanet.Source;
-            ImagePlanet.Source = null;
-            ImagePlanet.Source = source;
-        }
-#endif
 
         //prebuilt reusable sprites pools
         Parallel.Invoke(
@@ -223,7 +229,7 @@ public partial class SpaceShooter : MauiGame
 
     #endregion
 
-    #region GAME LOGIC
+    #region GAME LOOP
 
     public override void GameLoop(float deltaMs)
     {
@@ -390,19 +396,24 @@ public partial class SpaceShooter : MauiGame
 
     }
 
-    private GameState _gameState;
-    public GameState State
+    protected override void OnPaused()
     {
-        get
+        if (State == GameState.Playing)
         {
-            return _gameState;
+            StopLoop();
+            _lastState = this.State;
+            State = GameState.Paused;
         }
-        set
+    }
+
+    protected override void OnResumed()
+    {
+        if (State == GameState.Paused)
         {
-            if (_gameState != value)
+            State = _lastState;
+            if (State == GameState.Playing)
             {
-                _gameState = value;
-                OnPropertyChanged();
+                StartLoop();
             }
         }
     }
@@ -599,7 +610,7 @@ public partial class SpaceShooter : MauiGame
     private void RemoveReusable(IReusableSprite sprite)
     {
         sprite.IsActive = false;
-        sprite.AnimateDisappearing().ContinueWith(async (s) =>
+        sprite.AnimateDisappearing().ContinueWith((s) =>
         {
             _spritesToBeRemovedLater.Enqueue(sprite as SkiaControl);
         }).ConfigureAwait(false);
@@ -614,7 +625,10 @@ public partial class SpaceShooter : MauiGame
         // remove from the canvas
         if (sprite is BulletSprite bullet)
         {
-            BulletsPool.TryAdd(bullet.Uid, bullet);
+            if (!BulletsPool.TryAdd(bullet.Uid, bullet))
+            {
+                Trace.WriteLine($"[ADD] FAILED");
+            }
         }
         else if (sprite is EnemySprite enemy)
         {
@@ -626,12 +640,19 @@ public partial class SpaceShooter : MauiGame
         else
         if (sprite is ExplosionSprite explosion)
         {
-            ExplosionsPool.TryAdd(explosion.Uid, explosion);
+            if (!ExplosionsPool.TryAdd(explosion.Uid, explosion))
+            {
+                Trace.WriteLine($"[ADD] FAILED");
+            }
         }
         else
         if (sprite is ExplosionCrashSprite explosionCrash)
         {
-            ExplosionsCrashPool.TryAdd(explosionCrash.Uid, explosionCrash);
+            if (!ExplosionsCrashPool.TryAdd(explosionCrash.Uid, explosionCrash))
+            {
+                Trace.WriteLine($"[ADD] FAILED");
+            }
+
         }
         RemoveSubView(sprite);
     }
@@ -665,7 +686,7 @@ public partial class SpaceShooter : MauiGame
     {
         get
         {
-            return new Command(async (context) =>
+            return new Command((context) =>
             {
                 if (TouchEffect.CheckLockAndSet())
                     return;
@@ -755,6 +776,7 @@ public partial class SpaceShooter : MauiGame
     volatile bool moveLeft, moveRight;
 
     bool _wasPanning;
+    bool _isPressed;
 
     public override ISkiaGestureListener ProcessGestures(TouchActionType type, TouchActionEventArgs args, TouchActionResult touchAction,
         SKPoint childOffset, SKPoint childOffsetDirect, ISkiaGestureListener alreadyConsumed)
@@ -768,6 +790,7 @@ public partial class SpaceShooter : MauiGame
             if (touchAction == TouchActionResult.Down)
             {
                 _wasPanning = false;
+                _isPressed = true;
             }
 
             if (touchAction == TouchActionResult.Up)
@@ -778,11 +801,14 @@ public partial class SpaceShooter : MauiGame
                 // custom tapped event
                 // we are not using TouchActionResult.Tapped here because it has some UI related
                 // logic and might sometimes not trigger if we move the finger too much
-                // while we need just spamming taps
-                if (!_wasPanning)
+                // while we need just spamming taps.
+                // also we let it fire when you are pannign and tapping at the same 
+                if ((!_wasPanning || args.NumberOfTouches > 1) && _isPressed)
                 {
                     Fire();
                 }
+
+                _isPressed = false;
             }
 
             if (touchAction == TouchActionResult.Panning)
@@ -810,7 +836,7 @@ public partial class SpaceShooter : MauiGame
 
     #endregion
 
-    #region HUD
+    #region UI
 
     /// <summary>
     /// Score can change several times per frame
@@ -936,7 +962,7 @@ public partial class SpaceShooter : MauiGame
     {
         get
         {
-            return _ShowDialog;
+            return _ShowDialog && _appeared;
         }
         set
         {
@@ -947,6 +973,8 @@ public partial class SpaceShooter : MauiGame
             }
         }
     }
+
+    bool _appeared;
 
     #endregion
 
@@ -971,6 +999,24 @@ public partial class SpaceShooter : MauiGame
     private SKRect _playerHitBox = new();
     private bool _needPrerender;
     private bool _initialized;
+    private GameState _lastState;
+
+    private GameState _gameState;
+    public GameState State
+    {
+        get
+        {
+            return _gameState;
+        }
+        set
+        {
+            if (_gameState != value)
+            {
+                _gameState = value;
+                OnPropertyChanged();
+            }
+        }
+    }
 
     #endregion
 }

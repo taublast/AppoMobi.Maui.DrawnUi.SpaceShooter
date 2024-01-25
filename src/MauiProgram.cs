@@ -37,6 +37,9 @@ namespace SpaceShooter
                 }
             });
 
+            //to avoid returning many copies of same sprite bitmap for different images
+            SkiaImageManager.ReuseBitmaps = true;
+
 #if WINDOWS
             // game mode !!!
             Thread.CurrentThread.Priority = ThreadPriority.Highest;

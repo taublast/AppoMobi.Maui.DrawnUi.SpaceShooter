@@ -1,6 +1,3 @@
-using DrawnUi.Maui.Draw;
-using DrawnUi.Maui.Drawn.Animate;
-
 namespace SpaceShooter.Game;
 
 public class SignalInverter : SkiaShape
