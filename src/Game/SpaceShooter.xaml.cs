@@ -96,9 +96,9 @@ public partial class SpaceShooter : MauiGame
         {
 
             //our dialog has a transparent background that is blurring pixels under
-            //we we have 2 options:
-            //do not cache the backdrop to blur in realtime
-            //cache the backdrop but then it must blur after the content below was rendered. so we implement the hack below, knowing our blurred background will be statis as we show it only on pauses:
+            //so we have 2 options:
+            //A - do not cache the backdrop and blur underground pixels in realtime
+            //B - cache the backdrop but blur after the content below was rendered, so we implement the hack below, knowing our blurred background will be static as we show it only during pauses.
 
             _appeared = true;
             OnPropertyChanged(nameof(ShowDialog));
