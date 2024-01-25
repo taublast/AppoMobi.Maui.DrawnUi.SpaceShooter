@@ -247,7 +247,7 @@ public partial class SpaceShooter : MauiGame
                 (float)(playerPosition.X + Player.Width), (float)(playerPosition.Y + Player.Height));
 
 
-            // search for bullets, enemies and collision begins
+            // collision detection
             foreach (var x in this.Views)
             {
                 if (x is EnemySprite enemySprite && enemySprite.IsActive)
@@ -344,21 +344,17 @@ public partial class SpaceShooter : MauiGame
                 }
             }
 
-            // player movement begins
+            // player movement
             if (moveLeft)
             {
-                // if move left is true AND player is inside the boundary then move player to the left
                 UpdatePlayerPosition(Player.TranslationX - PLAYER_SPEED * deltaMs);
             }
 
             if (moveRight)
             {
-                // if move right is true AND player left + 90 is less than the width of the form
-                // then move the player to the right
                 UpdatePlayerPosition(Player.TranslationX + PLAYER_SPEED * deltaMs);
             }
 
-            // if the damage integer is greater than 99
             if (Health < 1)
             {
                 EndGameLost();
