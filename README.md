@@ -1,11 +1,5 @@
 # Space Shooter Arcade Game Etude built with _.NET MAUI_
 
-## _ToDo_
-
-* BUG: _sometimes_ some image sources are not loaded at app start from app resources
-* When full pull of explosions is used the one of the explosions is never playing just showing the last frame
-
-
 ## _The Challenge_
 
 To create a simple yet heavily animated arcade cross-platform game, using .NET MAUI XAML with Skia drawn UI, showing all the advantages that [.NET MAUI](https://learn.microsoft.com/en-us/dotnet/maui) and [SkiaSharp](https://github.com/mono/SkiaSharp) provide. 
