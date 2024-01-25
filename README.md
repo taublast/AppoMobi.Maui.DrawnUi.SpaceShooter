@@ -3,15 +3,15 @@
 ## _The Challenge_
 
 To create a simple yet heavily animated arcade cross-platform game, using .NET MAUI XAML with Skia drawn UI, showing all the advantages that [.NET MAUI](https://learn.microsoft.com/en-us/dotnet/maui) and [SkiaSharp](https://github.com/mono/SkiaSharp) provide. 
-The game runs on on Android, Windows, iOS, and Mac (Catalyst), all from a single code base. Desktop versions support both mouse and keyboard.
+The game runs on Android, Windows, iOS, and Mac (Catalyst), all from a single code base. Desktop versions support both mouse and keyboard.
 
 ## _The Game_
 
-Driven by [one](https://github.com/mooict/WPF-Space-shooter-game) of the awesome [ICT MOO tutorials](https://www.youtube.com/@mooict/videos). They have much content to play with, now that we can do it all with .NET MAUI.  
+Driven by [one](https://github.com/mooict/WPF-Space-shooter-game) of the awesome [ICT MOO tutorials](https://www.youtube.com/@mooict/videos), much content to play with, knowing we can do it all with .NET MAUI.  
 
-Free [Lottie animations](https://lottiefiles.com/) quickly fulfill the need for animated content.
+Free [Lottie animations](https://lottiefiles.com/) quickly fulfilled the need for animated content.
 
-This code here is intended as an etude, you are fully encouraged to reuse it for creating something exceptional of your own.
+This project is intended as an etude, you are fully encouraged to reuse it for creating something exceptional of your own.
 
 ## _Of Note_
 
