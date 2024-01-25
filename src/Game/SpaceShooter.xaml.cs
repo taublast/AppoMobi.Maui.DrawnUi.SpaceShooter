@@ -634,7 +634,7 @@ public partial class SpaceShooter : MauiGame
         else
         if (sprite is ExplosionSprite explosion)
         {
-            (!ExplosionsPool.TryAdd(explosion.Uid, explosion);
+            ExplosionsPool.TryAdd(explosion.Uid, explosion);
         }
         else
         if (sprite is ExplosionCrashSprite explosionCrash)
