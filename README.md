@@ -30,11 +30,11 @@ Desktop versions present non-resizable windows with platform-independent key eve
 Attained FPS looks okay in Release builds and even on Debug. 
 With an optimized design, especially in regards to control caching, we could imagine more games and fancy animations built with [#dotnetmaui](https://twitter.com/search?q=%23dotnetmaui).
 
-[Lottie animations](https://lottiefiles.com/) have proven themselves to be very easy and useful, quickly added during game creation.
+[Lottie animations](https://lottiefiles.com/) have proven themselves to be very useful and easy to add for quickly fulfilling the need for animations.
 
 Windows version is actually behind other platforms due to the lack of HW acceleration but this might [change soon](https://github.com/mono/SkiaSharp/issues/1893).
 
-Tried to make the garbage collector trigger as little as possible using [Unity's suggested techniques](https://docs.unity3d.com/Manual/performance-garbage-collection-best-practices.html). It still might have its small impact but we can hope for .NET MAUI some day to adopt a custom [incremental GC-collector](https://docs.unity3d.com/Manual/performance-incremental-garbage-collection.html) that Unity is using.
+Tried to make the garbage collector trigger as little as possible using [Unity's suggested techniques](https://docs.unity3d.com/Manual/performance-garbage-collection-best-practices.html). It still might have its small impact but we can hope for .NET MAUI someday to adopt a custom [incremental GC-collector](https://docs.unity3d.com/Manual/performance-incremental-garbage-collection.html) that Unity is using.
 
 ## _Licencing_
 
