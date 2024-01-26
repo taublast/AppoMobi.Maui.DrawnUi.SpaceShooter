@@ -48,5 +48,6 @@ namespace SpaceShooter
 
             Game.SpaceShooter.Instance.Resume();
         }
+
     }
 }

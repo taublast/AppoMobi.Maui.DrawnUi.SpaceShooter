@@ -51,5 +51,17 @@ namespace SpaceShooter
 
             return builder.Build();
         }
+
+        public static bool IsDebug
+        {
+            get
+            {
+#if DEBUG
+                return true;
+#else
+                return false;
+#endif
+            }
+        }
     }
 }

@@ -345,12 +345,12 @@ public partial class SpaceShooter : MauiGame
             }
 
             // player movement
-            if (moveLeft)
+            if (_moveLeft)
             {
                 UpdatePlayerPosition(Player.TranslationX - PLAYER_SPEED * deltaMs);
             }
 
-            if (moveRight)
+            if (_moveRight)
             {
                 UpdatePlayerPosition(Player.TranslationX + PLAYER_SPEED * deltaMs);
             }
@@ -722,12 +722,12 @@ public partial class SpaceShooter : MauiGame
 
         if (key == GameKey.Left)
         {
-            moveLeft = false;
+            _moveLeft = false;
         }
         else
         if (key == GameKey.Right)
         {
-            moveRight = false;
+            _moveRight = false;
         }
     }
 
@@ -745,18 +745,18 @@ public partial class SpaceShooter : MauiGame
         else
         if (key == GameKey.Left)
         {
-            moveLeft = true;
-            moveRight = false;
+            _moveLeft = true;
+            _moveRight = false;
         }
         else
         if (key == GameKey.Right)
         {
-            moveLeft = false;
-            moveRight = true;
+            _moveLeft = false;
+            _moveRight = true;
         }
     }
 
-    volatile bool moveLeft, moveRight;
+    volatile bool _moveLeft, _moveRight;
 
     bool _wasPanning;
     bool _isPressed;
@@ -778,8 +778,8 @@ public partial class SpaceShooter : MauiGame
 
             if (touchAction == TouchActionResult.Up)
             {
-                moveLeft = false;
-                moveRight = false;
+                _moveLeft = false;
+                _moveRight = false;
 
                 // custom tapped event
                 // we are not using TouchActionResult.Tapped here because it has some UI related
@@ -799,14 +799,14 @@ public partial class SpaceShooter : MauiGame
                 _wasPanning = true;
                 if (velocityX < 0)
                 {
-                    moveLeft = true;
-                    moveRight = false;
+                    _moveLeft = true;
+                    _moveRight = false;
                 }
                 else
                 if (velocityX > 0)
                 {
-                    moveRight = true;
-                    moveLeft = false;
+                    _moveRight = true;
+                    _moveLeft = false;
                 }
 
 

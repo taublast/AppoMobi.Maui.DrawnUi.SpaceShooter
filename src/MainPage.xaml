@@ -6,6 +6,7 @@
     xmlns:draw="http://schemas.appomobi.com/drawnUi/2023/draw"
     xmlns:game="clr-namespace:SpaceShooter.Game"
     xmlns:views="clr-namespace:AppoMobi.Maui.DrawnUi.Views;assembly=AppoMobi.Maui.DrawnUi"
+    xmlns:spaceShooter="using:SpaceShooter"
     BackgroundColor="Black">
 
     <draw:Canvas
@@ -21,6 +22,7 @@
             <game:SpaceShooter />
 
             <draw:SkiaLabelFps
+                IsVisible="{x:Static spaceShooter:MauiProgram.IsDebug}"
                 Margin="0,0,4,24"
                 BackgroundColor="DarkRed"
                 HorizontalOptions="End"
