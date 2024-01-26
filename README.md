@@ -30,7 +30,7 @@ Desktop versions present non-resizable windows with platform-independent key eve
 Attained FPS looks okay in Release builds and even on Debug. 
 With an optimized design, especially in regards to control caching, we could imagine more games and fancy animations built with [#dotnetmaui](https://twitter.com/search?q=%23dotnetmaui).
 
-[Lottie animations](https://lottiefiles.com/) have proven themselves to be very useful and easy to add for quickly fulfilling the need for animations.
+[Lottie animations](https://lottiefiles.com/) have proven themselves to be very useful to quickly implement animations.
 
 Windows version is actually behind other platforms due to the lack of HW acceleration but this might [change soon](https://github.com/mono/SkiaSharp/issues/1893).
 
