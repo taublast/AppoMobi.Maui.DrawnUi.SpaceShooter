@@ -36,6 +36,8 @@ Windows version is actually behind other platforms due to the lack of HW acceler
 
 Tried to make the garbage collector trigger as little as possible using [Unity's suggested techniques](https://docs.unity3d.com/Manual/performance-garbage-collection-best-practices.html). It still might have its small impact but we can hope for .NET MAUI someday to adopt a custom [incremental GC-collector](https://docs.unity3d.com/Manual/performance-incremental-garbage-collection.html) that Unity is using.
 
+Would add examples of playing frames from a sprite sheet and separate image files if there would be enough interest from the community.
+
 ## _Licencing_
 
 This code and the DrawnUI nuget are provided under the [MIT license](https://github.com/taublast/AppoMobi.Maui.DrawnUi.SpaceShooter?tab=MIT-1-ov-file#readme). ICT MOO space ships sprites come under the [Apache 2.0 license](https://github.com/mooict/WPF-Space-shooter-game?tab=Apache-2.0-1-ov-file#readme).
