@@ -254,12 +254,9 @@ public partial class SpaceShooter : MauiGame
                 {
                     //calculate hitbox once, we read it several times later
                     enemySprite.UpdateState(LastFrameTimeNanos);
-
-                    // make a new enemy rect for enemy hit box
+                
                     var enemy = enemySprite.HitBox;
 
-                    // first check if the enemy object has gone passed the player meaning
-                    // its gone passed 700 pixels from the top
                     if (enemySprite.TranslationY > this.Height)
                     {
                         CollideEnemyAndEarth(enemySprite);
@@ -280,7 +277,6 @@ public partial class SpaceShooter : MauiGame
                                 //calculate hitbox once, we read it several times later
                                 bulletSprite.UpdateState(LastFrameTimeNanos);
 
-                                // make a rect class with the bullet rectangles properties
                                 var bullet = bulletSprite.HitBox;
 
                                 if (bullet.IntersectsWith(enemy))
