@@ -11,7 +11,7 @@
 
     <draw:Canvas
         Gestures="Enabled"
-        HardwareAccelerated="True"
+        HardwareAcceleration="Enabled"
         HorizontalOptions="Fill"
         VerticalOptions="Fill">
 
