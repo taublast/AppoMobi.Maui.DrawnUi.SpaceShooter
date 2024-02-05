@@ -1,11 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<views:DrawnUiBasePage
+<draw:DrawnUiBasePage
     x:Class="SpaceShooter.MainPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:draw="http://schemas.appomobi.com/drawnUi/2023/draw"
     xmlns:game="clr-namespace:SpaceShooter.Game"
-    xmlns:views="clr-namespace:AppoMobi.Maui.DrawnUi.Views;assembly=AppoMobi.Maui.DrawnUi"
     xmlns:spaceShooter="using:SpaceShooter"
     BackgroundColor="Black">
 
@@ -34,4 +33,4 @@
         </draw:SkiaLayout>
     </draw:Canvas>
 
-</views:DrawnUiBasePage>
+</draw:DrawnUiBasePage>

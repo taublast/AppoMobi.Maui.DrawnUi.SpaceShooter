@@ -3,6 +3,10 @@
 
 https://github.com/taublast/AppoMobi.Maui.DrawnUi.SpaceShooter/assets/25801194/30523e94-12d5-4740-8af3-bebf11ef317f
 
+## _What's New_
+
+* Windows fixed running smooth
+* Updated to .NET 8
 
 ## _The Challenge_
 
@@ -24,6 +28,8 @@ Android and iOS run hardware-accelerated, with iOS using Apple Metal and Android
 For Windows and Mac Catalyst, hardware acceleration is not yet implemented, they still run above 100 FPS. 
 
 Desktop versions present non-resizable windows with platform-independent key events. They can be dragged among different displays adapting to new scale. Disabling the maximize button still needs to be implemented.
+
+After updating to NET8 app window is not centering on Catalyst until fix is found (estimated soon).
 
 ## _Final Words_
 
