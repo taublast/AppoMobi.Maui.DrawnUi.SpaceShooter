@@ -38,8 +38,6 @@ With an optimized design, especially in regards to control caching, we could ima
 
 [Lottie animations](https://lottiefiles.com/) have proven themselves to be very useful to quickly implement animations.
 
-Windows version is actually behind other platforms due to the lack of HW acceleration but this might [change soon](https://github.com/mono/SkiaSharp/issues/1893).
-
 Tried to make the garbage collector trigger as little as possible using [Unity's suggested techniques](https://docs.unity3d.com/Manual/performance-garbage-collection-best-practices.html). It still might have its small impact but we can hope for .NET MAUI someday to adopt a custom [incremental GC-collector](https://docs.unity3d.com/Manual/performance-incremental-garbage-collection.html) that Unity is using.
 
 Would add examples of playing frames from a sprite sheet and separate image files if there would be enough interest from the community.
