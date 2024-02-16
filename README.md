@@ -5,8 +5,7 @@ https://github.com/taublast/AppoMobi.Maui.DrawnUi.SpaceShooter/assets/25801194/3
 
 ## _What's New_
 
-* Windows fixed running smooth
-* Updated to .NET 8
+* MacCatalyst net8 crash fixed
 
 ## _The Challenge_
 
