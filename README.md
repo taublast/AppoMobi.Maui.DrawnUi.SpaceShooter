@@ -5,7 +5,7 @@ https://github.com/taublast/AppoMobi.Maui.DrawnUi.SpaceShooter/assets/25801194/3
 
 ## _What's New_
 
-* MacCatalyst net8 crash fixed
+* Latest nuget fixes FPS on several platforms
 
 ## _The Challenge_
 
