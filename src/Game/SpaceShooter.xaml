@@ -275,7 +275,7 @@
 
                 </draw:SkiaShape.StrokeGradient>
 
-                <draw:SkiaControl.Shadows>
+                <draw:SkiaShape.Shadows>
                     <draw:SkiaShadow
                         Blur="8"
                         Opacity="0.15"
@@ -283,7 +283,7 @@
                         Y="0"
                         Color="#00ff00" />
 
-                </draw:SkiaControl.Shadows>
+                </draw:SkiaShape.Shadows>
 
                 <draw:SkiaLayout
                     HorizontalOptions="Fill"

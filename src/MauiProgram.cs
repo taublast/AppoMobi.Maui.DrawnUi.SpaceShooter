@@ -31,7 +31,7 @@ namespace SpaceShooter
                 DesktopWindow = new()
                 {
                     Width = 500,
-                    Height = 700,
+                    Height = 800,
                     IsFixedSize = true //user cannot resize window
                     //todo disable maximize btn 
                 }

@@ -5,7 +5,8 @@ https://github.com/taublast/AppoMobi.Maui.DrawnUi.SpaceShooter/assets/25801194/3
 
 ## _What's New_
 
-* Latest nuget fixes FPS on several platforms
+* Fixed gestures on sensitive displays.
+* New SkiaSharp3 preview nuget enabled hardware-acceleration for Windows, MacCatalyst and [other features and fixes](https://github.com/taublast/DrawnUi.Maui). 
 
 ## _The Challenge_
 
