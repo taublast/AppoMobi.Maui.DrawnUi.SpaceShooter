@@ -3,10 +3,6 @@
 
 https://github.com/taublast/AppoMobi.Maui.DrawnUi.SpaceShooter/assets/25801194/30523e94-12d5-4740-8af3-bebf11ef317f
 
-## _What's New_
-
-* Fixed gestures on sensitive displays.
-* New SkiaSharp3 preview nuget enabled hardware-acceleration for Windows, MacCatalyst and [other features and fixes](https://github.com/taublast/DrawnUi.Maui). 
 
 ## _The Challenge_
 
@@ -23,13 +19,16 @@ Free [Lottie animations](https://lottiefiles.com/) quickly fulfilled the need fo
 
 ## _Of Note_
 
-Android and iOS run hardware-accelerated, with iOS using Apple Metal and Android on GL. 
+* Android is hardware-accelerated with GL
+* iOS is hardware-accelerated with Apple Metal
+* Windows is using skia3-pre nuget for hardware acceleration with Angle.
+* Mac Catalyst is using stable skia2 nuget, running CPU only until a new skia3 preview is released.
 
-For Windows and Mac Catalyst, hardware acceleration is not yet implemented, they still run above 100 FPS. 
+Hardware accelerated versions run with FPS capped at display refresh rate.
 
-Desktop versions present non-resizable windows with platform-independent key events. They can be dragged among different displays adapting to new scale. Disabling the maximize button still needs to be implemented.
+Desktop versions present non-resizable windows, capturing keyboard input. They can be dragged among different displays adapting to new scale. Disabling the maximize button still needs to be implemented.
 
-After updating to NET8 app window is not centering on Catalyst until fix is found (estimated soon).
+After updating to NET8 app window is not centering on Catalyst until fix is found.
 
 ## _Final Words_
 
@@ -40,7 +39,14 @@ With an optimized design, especially in regards to control caching, we could ima
 
 Tried to make the garbage collector trigger as little as possible using [Unity's suggested techniques](https://docs.unity3d.com/Manual/performance-garbage-collection-best-practices.html). It still might have its small impact but we can hope for .NET MAUI someday to adopt a custom [incremental GC-collector](https://docs.unity3d.com/Manual/performance-incremental-garbage-collection.html) that Unity is using.
 
-Would add examples of playing frames from a sprite sheet and separate image files if there would be enough interest from the community.
+There is also still room for improvement on some platforms to marry game canvas update with sharing the UI thread with MAUI bindings and the user input to make updating more smooth. Actually thinking towards a dedicated `GameCanvas` to exist along with `Canvas` to sacrifice MAUI bindings for a smooth game experience.
+
+When i have spare time would add examples of playing frames from a sprite sheet and separate image files (would be anotehr game) along with playing game music/sounds.
+
+## _What's New_
+
+* Windows is using skia3-pre nuget for hardware acceleration, other platforms use stable skia2 nuget.
+* Fixed loop bug that was randomly not removing inactive sprites.
 
 ## _Licencing_
 

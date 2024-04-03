@@ -3,6 +3,7 @@
 
 global using DrawnUi.Maui.Controls;
 global using SkiaSharp;
+using System.Collections.Concurrent;
 using AppoMobi.Maui.Gestures;
 using AppoMobi.Specials;
 using System.Diagnostics;
@@ -295,18 +296,21 @@ public partial class SpaceShooter : MauiGame
 
                 }
                 else
-                if (x is BulletSprite bulletSprite && bulletSprite.IsActive)
+                if (x is BulletSprite bulletSprite)
                 {
-                    // check if bullet has reached top part of the screen
-                    if (bulletSprite.TranslationY < -Height)
-                    {
-                        RemoveReusable(bulletSprite); //will set IsActive = false
-                    }
-
-                    // move the bullet rectangle towards top of the screen
                     if (bulletSprite.IsActive)
                     {
-                        bulletSprite.UpdatePosition(deltaMs);
+                        // check if bullet has reached top part of the screen
+                        if (bulletSprite.TranslationY < -Height)
+                        {
+                            RemoveReusable(bulletSprite); //will set IsActive = false
+                        }
+
+                        // move the bullet rectangle towards top of the screen
+                        if (bulletSprite.IsActive)
+                        {
+                            bulletSprite.UpdatePosition(deltaMs);
+                        }
                     }
                 }
             }
@@ -436,13 +440,11 @@ public partial class SpaceShooter : MauiGame
 
     void StartNewGame()
     {
-        _spritesToBeRemoved.Clear();
-
         foreach (var control in Views)
         {
             if (control is EnemySprite || control is BulletSprite)
             {
-                _spritesToBeRemoved.Add(control);
+                _spritesToBeRemovedLater.Enqueue(control);
             }
         }
 
@@ -643,18 +645,10 @@ public partial class SpaceShooter : MauiGame
         {
             if (_spritesToBeRemovedLater.TryDequeue(out sprite))
             {
-                _spritesToBeRemoved.Add(sprite);
+                RemoveSprite(sprite);
             }
         }
-
-        if (_spritesToBeRemoved.Count > 0)
-        {
-            foreach (var remove in _spritesToBeRemoved)
-            {
-                RemoveSprite(remove);
-            }
-            _spritesToBeRemoved.Clear();
-        }
+        
     }
 
     #endregion
@@ -795,20 +789,20 @@ public partial class SpaceShooter : MauiGame
             }
 
             if (touchAction == TouchActionResult.Tapped
-                || (touchAction == TouchActionResult.Up && Math.Abs(args.Distance.Total.X) < thresholdNotPanning * RenderingScale))
+                || (touchAction == TouchActionResult.Up && _isPressed && Math.Abs(args.Distance.Total.X) < thresholdNotPanning * RenderingScale))
             {
-                // custom tapped event
-                // we are not using TouchActionResult.Tapped here because it has some UI related
-                // logic and might sometimes not trigger if we move the finger too much
-                // while we need just spamming taps.
-                // also we let it fire when you are pannign and tapping at the same 
-                //  if ((!_wasPanning || args.NumberOfTouches > 1) && _isPressed)
-                {
-                    Fire();
-                }
+                Fire();
+            }
 
+            if (touchAction == TouchActionResult.Up)
+            {
                 _isPressed = false;
             }
+
+            _moveRight = false;
+            _moveLeft = false;
+
+            return this;
         }
 
         _moveRight = false;
@@ -972,9 +966,12 @@ public partial class SpaceShooter : MauiGame
     protected Dictionary<Guid, ExplosionSprite> ExplosionsPool = new(MAX_EXPLOSIONS);
 
     protected Dictionary<Guid, ExplosionCrashSprite> ExplosionsCrashPool = new(MAX_EXPLOSIONS);
-
-    private List<SkiaControl> _spritesToBeRemoved = new(128);
-    private Queue<SkiaControl> _spritesToBeRemovedLater = new(128);
+    
+    /// <summary>
+    /// This could be changed from loop and from individual sprite animatiion thread
+    /// </summary>
+    private ConcurrentQueue<SkiaControl> _spritesToBeRemovedLater = new();
+    
     private List<SkiaControl> _spritesToBeAdded = new(128);
     private List<SkiaControl> _startAnimations = new(MAX_EXPLOSIONS);
     private float _pauseEnemyCreation;
