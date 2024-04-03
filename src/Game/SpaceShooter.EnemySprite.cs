@@ -20,7 +20,7 @@ public partial class SpaceShooter
             {
                 LoadSourceOnFirstDraw = true, //do not load source when it changed but only when first drawing
                 Source = $"{SpritesPath}/{enemySpriteCounter}.png", //random image
-                SpeedRatio = 0.9f + enemySpriteCounter * 2 / 10f, //random speed
+                SpeedRatio = 0.9f + enemySpriteCounter * 2.0f / 10f, //random speed
                 ColorTint = Color.Parse("#22110022"), //tinted a bit for our game
                 ZIndex = 4,
                 UseCache = SkiaCacheType.Image,
@@ -28,7 +28,6 @@ public partial class SpaceShooter
                 HeightRequest = 44,
                 AddEffect = SkiaImageEffect.Tint,
                 EffectBlendMode = SKBlendMode.SrcATop,
-                RescalingQuality = SKFilterQuality.High
             };
 
             newEnemy.ResetAnimationState();
