@@ -30,8 +30,8 @@ namespace SpaceShooter
                 UseDesktopKeyboard = true, //capture keys on desktop
                 DesktopWindow = new()
                 {
-                    Width = 500,
-                    Height = 700,
+                    Width = 550,
+                    Height = 750,
                     IsFixedSize = true //user cannot resize window
                     //todo disable maximize btn 
                 }
