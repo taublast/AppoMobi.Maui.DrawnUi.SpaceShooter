@@ -20,15 +20,8 @@ jobs:
         
     - name: Install MAUI workload
       run: dotnet workload install maui
-    - name: Decrypt PFX File
-      run: |
-        echo "${{ secrets.WINDOWS_PFX_FILE }}" > cert.pfx.asc
-        certutil -decode cert.pfx.asc cert.pfx
-    - name: Add Cert to Store
-      run: certutil -user -q -p ${{ secrets.WINDOWS_PFX_PASSWORD }} -importpfx cert.pfx NoRoot
+      
     - name: Build
-      run: dotnet publish MauiGithubActionsSample/MauiGithubActionsSample.csproj -c Release -f:net6.0-windows10.0.19041.0 /p:GenerateAppxPackageOnBuild=true /p:AppxPackageSigningEnabled=true /p:PackageCertificateThumbprint="${{ secrets.WINDOWS_PFX_THUMBPRINT }}"      
-    - name: Upload Build Artifacts
-      uses: actions/upload-artifact@v3.1.0
-      with:
-        path: .\**\AppPackages\**\*.*
+      run: dotnet build src/SpaceShooter.sln -c Release -f:net8.0-windows10.0.19041.0
+
+  
