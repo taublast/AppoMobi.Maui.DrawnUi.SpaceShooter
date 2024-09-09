@@ -15,7 +15,7 @@ Driven by [one](https://github.com/mooict/WPF-Space-shooter-game) of the awesome
 
 Free [Lottie animations](https://lottiefiles.com/) quickly fulfilled the need for animated content.
 
-[DrawnUI](https://github.com/taublast/AppoMobi.Maui.DrawnUi.Demo) pre-alpha nuget was used to draw virtual controls on a Skia canvas.
+[DrawnUI](https://github.com/taublast/DrawnUi.Maui) was used to draw virtual controls on a Skia canvas.
 
 ## _Of Note_
 
