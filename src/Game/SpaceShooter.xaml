@@ -41,13 +41,13 @@
     <!--  STARS PARALLAX  -->
     <draw:SkiaImageTiles
         x:Name="ParallaxLayer"
-        VerticalOptions="Fill"
         HorizontalOptions="Fill"
         Source="Space/Sprites/stars.png"
         TileAspect="Cover"
+        TileCacheType="GPU"
         TileHeight="600"
         TileWidth="600"
-        TileCacheType="GPU" />
+        VerticalOptions="Fill" />
 
     <!--  SCORE  -->
     <draw:SkiaLabel
@@ -151,6 +151,7 @@
     <draw:SkiaLottie
         x:Name="PlayerShieldExplosion"
         AutoPlay="False"
+        DefaultFrame="-1"
         HorizontalOptions="Center"
         LockRatio="1"
         Opacity="0.75"
@@ -222,7 +223,6 @@
         <draw:SkiaLayout
             Padding="16"
             HorizontalOptions="Fill"
-            UseCache="GPU"
             VerticalOptions="Fill"
             ZIndex="-1">
 
@@ -233,7 +233,7 @@
 
                 <draw:SkiaBackdrop
                     BackgroundColor="#22000000"
-                    Blur="8"
+                    Blur="3"
                     HorizontalOptions="Fill"
                     Tag="Blur"
                     VerticalOptions="Fill"

@@ -3,10 +3,8 @@
 
 global using DrawnUi.Maui.Controls;
 global using SkiaSharp;
-using System.Collections.Concurrent;
 using AppoMobi.Maui.Gestures;
 using AppoMobi.Specials;
-using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 
@@ -440,11 +438,14 @@ public partial class SpaceShooter : MauiGame
 
     void StartNewGame()
     {
-        foreach (var control in Views)
+        lock (_lockSpritesToBeRemovedLater)
         {
-            if (control is EnemySprite || control is BulletSprite)
+            foreach (var control in Views)
             {
-                _spritesToBeRemovedLater.Enqueue(control);
+                if (control is EnemySprite || control is BulletSprite)
+                {
+                    _spritesToBeRemovedLater.Enqueue(control);
+                }
             }
         }
 
@@ -606,7 +607,10 @@ public partial class SpaceShooter : MauiGame
         sprite.IsActive = false;
         sprite.AnimateDisappearing().ContinueWith((s) =>
         {
-            _spritesToBeRemovedLater.Enqueue(sprite as SkiaControl);
+            lock (_lockSpritesToBeRemovedLater)
+            {
+                _spritesToBeRemovedLater.Enqueue(sprite as SkiaControl);
+            }
         }).ConfigureAwait(false);
     }
 
@@ -641,14 +645,16 @@ public partial class SpaceShooter : MauiGame
     void ProcessSpritesToBeRemoved()
     {
         SkiaControl sprite;
-        while (_spritesToBeRemovedLater.Count > 0)
+        lock (_lockSpritesToBeRemovedLater)
         {
-            if (_spritesToBeRemovedLater.TryDequeue(out sprite))
+            while (_spritesToBeRemovedLater.Count > 0)
             {
-                RemoveSprite(sprite);
+                if (_spritesToBeRemovedLater.TryDequeue(out sprite))
+                {
+                    RemoveSprite(sprite);
+                }
             }
         }
-        
     }
 
     #endregion
@@ -699,13 +705,13 @@ public partial class SpaceShooter : MauiGame
 
     public override void OnKeyUp(MauiKey mauiKey)
     {
-        if (mauiKey == MauiKey.Enter && (State == GameState.Ready || State == GameState.Ended))
+        var key = MapToGame(mauiKey);
+
+        if ((key == GameKey.Fire || mauiKey == MauiKey.Enter) && (State == GameState.Ready || State == GameState.Ended))
         {
             StartNewGame();
             return;
         }
-
-        var key = MapToGame(mauiKey);
 
         if (State != GameState.Playing)
             return;
@@ -754,18 +760,17 @@ public partial class SpaceShooter : MauiGame
 
     const double thresholdNotPanning = 20.0;
 
-    public override ISkiaGestureListener ProcessGestures(TouchActionType type, TouchActionEventArgs args, TouchActionResult touchAction,
-        SKPoint childOffset, SKPoint childOffsetDirect, ISkiaGestureListener alreadyConsumed)
+    public override ISkiaGestureListener ProcessGestures(SkiaGesturesParameters args, GestureEventProcessingInfo apply)
     {
         if (State == GameState.Playing)
         {
-            var velocityX = (float)(args.Distance.Velocity.X / RenderingScale);
+            var velocityX = (float)(args.Event.Distance.Velocity.X / RenderingScale);
             //var velocityY = (float)(args.Distance.Velocity.Y / RenderingScale);
 
-            if (touchAction == TouchActionResult.Panning)
+            if (args.Type == TouchActionResult.Panning)
             {
                 _wasPanning = true;
-                _lastPan = args.Location;
+                _lastPan = args.Event.Location;
                 if (velocityX < 0)
                 {
                     _moveLeft = true;
@@ -781,20 +786,20 @@ public partial class SpaceShooter : MauiGame
                 return this;
             }
 
-            if (touchAction == TouchActionResult.Down)
+            if (args.Type == TouchActionResult.Down)
             {
-                _lastDown = args.Location;
+                _lastDown = args.Event.Location;
                 _wasPanning = false;
                 _isPressed = true;
             }
 
-            if (touchAction == TouchActionResult.Tapped
-                || (touchAction == TouchActionResult.Up && _isPressed && Math.Abs(args.Distance.Total.X) < thresholdNotPanning * RenderingScale))
+            if (args.Type == TouchActionResult.Tapped
+                || (args.Type == TouchActionResult.Up && _isPressed && Math.Abs(args.Event.Distance.Total.X) < thresholdNotPanning * RenderingScale))
             {
                 Fire();
             }
 
-            if (touchAction == TouchActionResult.Up)
+            if (args.Type == TouchActionResult.Up)
             {
                 _isPressed = false;
             }
@@ -808,7 +813,7 @@ public partial class SpaceShooter : MauiGame
         _moveRight = false;
         _moveLeft = false;
 
-        return base.ProcessGestures(type, args, touchAction, childOffset, childOffsetDirect, alreadyConsumed);
+        return base.ProcessGestures(args, apply);
     }
     #endregion
 
@@ -825,35 +830,35 @@ public partial class SpaceShooter : MauiGame
         LabelHiScore.Text = HiScoreLocalized;
     }
 
-    private string _DialogMessage;
+    private string _dialogMessage;
     public string DialogMessage
     {
         get
         {
-            return _DialogMessage;
+            return _dialogMessage;
         }
         set
         {
-            if (_DialogMessage != value)
+            if (_dialogMessage != value)
             {
-                _DialogMessage = value;
+                _dialogMessage = value;
                 OnPropertyChanged();
             }
         }
     }
 
-    private string _DialogButton = "OK"; //can localize
+    private string _dialogButton = "OK"; //can localize
     public string DialogButton
     {
         get
         {
-            return _DialogButton;
+            return _dialogButton;
         }
         set
         {
-            if (_DialogButton != value)
+            if (_dialogButton != value)
             {
-                _DialogButton = value;
+                _dialogButton = value;
                 OnPropertyChanged();
             }
         }
@@ -892,18 +897,18 @@ public partial class SpaceShooter : MauiGame
         }
     }
 
-    private int _Score;
+    private int _score;
     public int Score
     {
         get
         {
-            return _Score;
+            return _score;
         }
         set
         {
-            if (_Score != value)
+            if (_score != value)
             {
-                _Score = value;
+                _score = value;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(ScoreLocalized));
 
@@ -915,36 +920,36 @@ public partial class SpaceShooter : MauiGame
         }
     }
 
-    private int _HiScore = 500;
+    private int _hiScore = 500;
     public int HiScore
     {
         get
         {
-            return _HiScore;
+            return _hiScore;
         }
         set
         {
-            if (_HiScore != value)
+            if (_hiScore != value)
             {
-                _HiScore = value;
+                _hiScore = value;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(HiScoreLocalized));
             }
         }
     }
 
-    private bool _ShowDialog;
+    private bool _showDialog;
     public bool ShowDialog
     {
         get
         {
-            return _ShowDialog && _appeared;
+            return _showDialog && _appeared;
         }
         set
         {
-            if (_ShowDialog != value)
+            if (_showDialog != value)
             {
-                _ShowDialog = value;
+                _showDialog = value;
                 OnPropertyChanged();
             }
         }
@@ -966,16 +971,16 @@ public partial class SpaceShooter : MauiGame
     protected Dictionary<Guid, ExplosionSprite> ExplosionsPool = new(MAX_EXPLOSIONS);
 
     protected Dictionary<Guid, ExplosionCrashSprite> ExplosionsCrashPool = new(MAX_EXPLOSIONS);
-    
+
     /// <summary>
     /// This could be changed from loop and from individual sprite animatiion thread
     /// </summary>
-    private ConcurrentQueue<SkiaControl> _spritesToBeRemovedLater = new();
-    
+    private Queue<SkiaControl> _spritesToBeRemovedLater = new();
+    private object _lockSpritesToBeRemovedLater = new();
     private List<SkiaControl> _spritesToBeAdded = new(128);
     private List<SkiaControl> _startAnimations = new(MAX_EXPLOSIONS);
     private float _pauseEnemyCreation;
-    private SKRect _playerHitBox = new();
+    private SKRect _playerHitBox;
     private bool _needPrerender;
     private bool _initialized;
     private GameState _lastState;

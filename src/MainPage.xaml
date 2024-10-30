@@ -9,6 +9,7 @@
     BackgroundColor="Black">
 
     <draw:Canvas
+        x:Name="GameCanvas"
         Gestures="Enabled"
         HardwareAcceleration="Enabled"
         HorizontalOptions="Fill"
